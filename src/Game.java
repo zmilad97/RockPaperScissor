@@ -20,8 +20,8 @@ public class Game extends Thread {
 
     public void run() {
         try {
-            player1.getDos().writeChars("\n[R]ock,[P]aper,[S]cissors : ");
-            player2.getDos().writeChars("\n[R]ock,[P]aper,[S]cissors : ");
+            player1.getDos().writeChars("\n\n\n[R]ock,[P]aper,[S]cissors : ");
+            player2.getDos().writeChars("\n\n\n[R]ock,[P]aper,[S]cissors : ");
 
             checkWin(player1.getBr().readLine(), player2.getBr().readLine());
         } catch (IOException e) {

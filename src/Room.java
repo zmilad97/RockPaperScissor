@@ -28,7 +28,7 @@ public class Room {
         if (this.players.size() != playerCount) {
             this.players.add(player);
             int needPlayer = playerCount - this.players.size();
-            player.getDos().writeChars("\nYou Entered The Room : " + this.name + " Created By : " + this.getPlayers().get(0).getName() + "\n" +
+            player.getDos().writeChars("\nYou Entered The Room : " + this.name + "\n" +
                     "\nYou Are Player Number " + players.size() + " Waiting For " + needPlayer + " More Players");
             this.players.forEach(p -> {
                 try {
@@ -63,7 +63,7 @@ public class Room {
                 if (players.size() > 1) {
                     players.forEach(p -> {
                         try {
-                            p.getDos().writeChars("Total Cards : Rock = " + cards.get("Rock")
+                            p.getDos().writeChars("\n\nTotal Cards : Rock = " + cards.get("Rock")
                                     + " | Paper = " + cards.get("Paper") + " | Scissor = " + cards.get("Scissor"));
                         } catch (IOException e) {
                             e.printStackTrace();
@@ -84,7 +84,7 @@ public class Room {
                     } else {
                         try {
                             System.out.println(k.getName() + " : is on the rest this round");
-                            k.getDos().writeChars("you are on rest on this round");
+                            k.getDos().writeChars("\nyou are on rest on this round");
                         } catch (IOException e) {
                             e.printStackTrace();
                         }
@@ -96,7 +96,7 @@ public class Room {
                     if (p.getLives() == 0) {
                         players.remove(p);
                         try {
-                            p.getDos().writeChars("you lost ! you have no more lives .");
+                            p.getDos().writeChars("\nyou lost ! you have no more lives .");
                         } catch (IOException e) {
                             e.printStackTrace();
                         }
