@@ -20,7 +20,6 @@ public class Server {
         while (!serverSocket.isClosed()) {
             Socket socket = serverSocket.accept();
             Player player = new Player(socket);
-            GameService.players.add(player);
             System.out.println("\nPlayer (" + (player.getSocket().getLocalAddress().toString()).substring(1) + ":"
                     + socket.getLocalPort() + ") has joined ...");
             UserService userService = new UserService(player);

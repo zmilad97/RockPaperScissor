@@ -31,6 +31,17 @@ public class Game extends Thread {
 
     private void checkWin(String player1Answer, String player2Answer) {
 
+        switch (player1Answer) {
+            case "r" -> player1.cardsMinus("Rock");
+            case "p" -> player1.cardsMinus("Paper");
+            case "s" -> player1.cardsMinus("Scissor");
+        }
+        switch (player2Answer) {
+            case "r" -> player2.cardsMinus("Rock");
+            case "p" -> player2.cardsMinus("Paper");
+            case "s" -> player2.cardsMinus("Scissor");
+        }
+
         if (player1Answer.equals(player2Answer)) {
             result.put(player1, "draw");
             result.put(player2, "draw");
@@ -64,10 +75,10 @@ public class Game extends Thread {
         try {
             player1.getDos().writeBytes("\n you " + result.get(player1).toUpperCase() + " you have : " + player1.getLives() + " lives\n");
             player2.getDos().writeBytes("\n you " + result.get(player2).toUpperCase() + " you have : " + player2.getLives() + " lives\n");
-            if (player1.getLives() > 0)
-                GameService.findRoom(roomId).addPlayer(player1);
-            if (player2.getLives() > 0)
-                GameService.findRoom(roomId).addPlayer(player2);
+
+            GameService.findRoom(roomId).addPlayer(player1);
+            GameService.findRoom(roomId).addPlayer(player2);
+
         } catch (IOException e) {
             e.printStackTrace();
         }

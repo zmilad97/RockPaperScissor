@@ -58,59 +58,62 @@ public class Room {
             }
         });
         while (!win) {
-            Map<String, Integer> cards = cardsCount();
-            if (players.size() > 1) {
-                players.forEach(p -> {
-                    try {
-                        p.getDos().writeChars("Total Cards : Rock = " + cards.get("Rock")
-                                + " | Paper = " + cards.get("Paper") + " | Scissor = " + cards.get("Scissor"));
-                    } catch (IOException e) {
-                        e.printStackTrace();
+            if (players.size() == playerCount) {
+                Map<String, Integer> cards = cardsCount();
+                if (players.size() > 1) {
+                    players.forEach(p -> {
+                        try {
+                            p.getDos().writeChars("Total Cards : Rock = " + cards.get("Rock")
+                                    + " | Paper = " + cards.get("Paper") + " | Scissor = " + cards.get("Scissor"));
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    });
+                } else {
+                    win = true;
+                }
+                /**
+                 * here matched players enter the game
+                 */
+                Map<Player, Player> matchedPlayers = matchingPlayers();
+                matchedPlayers.forEach((k, v) -> {
+                    if (!k.equals(v)) {
+                        Game game = new Game(id, k, v);
+                        game.start();
+                        games.add(game);
+                    } else {
+                        try {
+                            System.out.println(k.getName() + " : is on the rest this round");
+                            k.getDos().writeChars("you are on rest on this round");
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
                     }
                 });
-            } else {
-                win = true;
+
+
+                players.forEach(p -> {
+                    if (p.getLives() == 0) {
+                        players.remove(p);
+                        try {
+                            p.getDos().writeChars("you lost ! you have no more lives .");
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    } else if (p.getCardsCount().get("Rock") == 0 &&
+                            p.getCardsCount().get("Paper") == 0 &&
+                            p.getCardsCount().get("Scissor") == 0 &&
+                            p.getLives() < 3) {
+                        players.remove(p);
+                        try {
+                            p.getDos().writeChars("you lost ! you have no more cards .");
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                });
             }
-            /**
-             * here matched players enter for the first game
-             */
-            Map<Player, Player> matchedPlayers = matchingPlayers();
-            matchedPlayers.forEach((k, v) -> {
-                if (!k.equals(v)) {
-                    Game game = new Game(id, k, v);
-                    game.start();
-                    games.add(game);
-                } else {
-                    try {
-                        System.out.println(k.getName() + " : is on the rest this round");
-                        k.getDos().writeChars("you are on rest on this round");
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                }
-            });
 
-
-            players.forEach(p -> {
-                if (p.getLives() == 0) {
-                    players.remove(p);
-                    try {
-                        p.getDos().writeChars("you lost ! you have no more lives .");
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                } else if (p.getCardsCount().get("Rock") == 0 &&
-                        p.getCardsCount().get("Paper") == 0 &&
-                        p.getCardsCount().get("Scissor") == 0 &&
-                        p.getLives() < 3) {
-                    players.remove(p);
-                    try {
-                        p.getDos().writeChars("you lost ! you have no more cards .");
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                }
-            });
         }
     }
 
@@ -131,17 +134,24 @@ public class Room {
 
     public Map<Player, Player> matchingPlayers() {
         Random random = new Random();
-        List<Player> playerList = players;
+        List<Player> playerList = new ArrayList<>();
+        players.forEach(p -> {
+            if (p.getLives() > 0)
+                playerList.add(p);
+        });
         Map<Player, Player> playerMap = new HashMap<>();
 
-        while (players.size() > 1) {
+        while (playerList.size() > 1) {
             Player randP1 = playerList.get(random.nextInt(playerList.size()));
+            players.remove(randP1);
             playerList.remove(randP1);
             Player randP2 = playerList.get(random.nextInt(playerList.size()));
+            players.remove(randP2);
+
             playerList.remove(randP2);
             playerMap.put(randP1, randP2);
         }
-        if (players.size() == 1)
+        if (playerList.size() == 1)
             playerMap.put(players.get(0), players.get(0));
 
         return playerMap;

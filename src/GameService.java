@@ -11,6 +11,7 @@ import java.util.Map;
 public class GameService {
 
     public static Map<String, Room> openRooms = new HashMap<>();
+    public static Map<Room,Player> roomPlayerMap = new HashMap<>();
     public static Map<Game, Map<Player, String>> gamesResult = new HashMap<>();
 
 

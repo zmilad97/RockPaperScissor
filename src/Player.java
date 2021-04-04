@@ -29,6 +29,10 @@ public class Player {
         this.cardsCount.put("Scissor", 12);
     }
 
+    public void cardsMinus(String card){
+        cardsCount.put(card,cardsCount.get(card)-1);
+    }
+
     public String getId() {
         return Id;
     }
