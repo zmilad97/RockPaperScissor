@@ -4,6 +4,7 @@ import java.util.*;
 public class Room {
     private final String id;
     private String name;
+    private Player creator;
     private boolean isPublic;
     private final int playerCount;
     private List<Player> players;
@@ -57,7 +58,6 @@ public class Room {
                 e.printStackTrace();
             }
         });
-        while (!win) {
             if (players.size() == playerCount) {
                 Map<String, Integer> cards = cardsCount();
                 if (players.size() > 1) {
@@ -94,7 +94,7 @@ public class Room {
 
                 players.forEach(p -> {
                     if (p.getLives() == 0) {
-                        players.remove(p);
+
                         try {
                             p.getDos().writeChars("\nyou lost ! you have no more lives .");
                         } catch (IOException e) {
@@ -104,7 +104,7 @@ public class Room {
                             p.getCardsCount().get("Paper") == 0 &&
                             p.getCardsCount().get("Scissor") == 0 &&
                             p.getLives() < 3) {
-                        players.remove(p);
+
                         try {
                             p.getDos().writeChars("you lost ! you have no more cards .");
                         } catch (IOException e) {
@@ -113,8 +113,6 @@ public class Room {
                     }
                 });
             }
-
-        }
     }
 
 
@@ -136,7 +134,10 @@ public class Room {
         Random random = new Random();
         List<Player> playerList = new ArrayList<>();
         players.forEach(p -> {
-            if (p.getLives() > 0)
+            if (p.getLives() > 0 &&
+                    !(p.getCardsCount().get("Rock") == 0 &&
+                            p.getCardsCount().get("Paper") == 0 &&
+                            p.getCardsCount().get("Scissor") == 0))
                 playerList.add(p);
         });
         Map<Player, Player> playerMap = new HashMap<>();
@@ -194,5 +195,11 @@ public class Room {
         isPublic = aPublic;
     }
 
+    public Player getCreator() {
+        return creator;
+    }
 
+    public void setCreator(Player creator) {
+        this.creator = creator;
+    }
 }

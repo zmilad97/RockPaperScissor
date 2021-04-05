@@ -3,7 +3,6 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-
 public class UserService extends Thread {
 
     private Player player;
@@ -61,6 +60,7 @@ public class UserService extends Thread {
             Room room = new Room(isPublic, players, name);
             GameService.openRooms.put(room.getId(), room);
             room.addPlayer(player);
+            room.setCreator(player);
             GameService.roomPlayerMap.put(room, player);
             dos.writeChars("\nthe room id is : " + room.getId() + "\nshare it with your friends... \n");
         } catch (NumberFormatException e) {
@@ -91,7 +91,7 @@ public class UserService extends Thread {
         });
         roomList.forEach(r -> {
             try {
-                dos.writeChars("\n" + roomList.indexOf(r) + " - " + r.getName() + " Made By : " + r.getPlayers().get(0).getName() + "\n");
+                dos.writeChars("\n" + roomList.indexOf(r) + " - " + r.getName() + " Made By : " + r.getCreator() + "\n");
             } catch (IOException e) {
                 e.printStackTrace();
             }

@@ -2,7 +2,9 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Random;
 import java.util.UUID;
+//TODO : protobuf | xolstice.maven | google guice | drop wizard or SparkJava.com library for rest |
 
 public class Server {
     private final String ip = "localhost";
