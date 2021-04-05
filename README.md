@@ -10,7 +10,7 @@ build a jar file and run it using below commands
 
 ```
 git clone https://github.com/zmilad97/RockPaperScissor.git
-cd online-exam
+cd RockPaperScissor
 ./mvnw package
 java -jar target/*.jar
 ```
