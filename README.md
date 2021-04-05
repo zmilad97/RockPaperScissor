@@ -1,7 +1,10 @@
 # RockPaperScissor
-|Limited| Rock Paper Scissor game (developing)
+#|Limited|# Rock Paper Scissor game (developing)
+
+It's a different Rock,Paper,Scissor game that built using java.
 
 
+## Game Details
 Players have limited cards of each rock, paper and scissor and all cards count shows before every game
 Each player has 3 lives.
 
