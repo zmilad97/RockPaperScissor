@@ -1,5 +1,5 @@
 # RockPaperScissor
-#|Limited|# Rock Paper Scissor game (developing)
+|Limited| Rock Paper Scissor game (developing)
 
 It's a different Rock,Paper,Scissor game that built using java.
 
