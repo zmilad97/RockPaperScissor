@@ -1,4 +1,9 @@
-import javax.xml.transform.Result;
+package service;
+
+import model.Game;
+import model.Player;
+import model.Room;
+
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.Socket;
@@ -42,6 +47,7 @@ public class GameService {
     }
 
     private static void checkWin() {
+
         String player1 = answers.get(players.get(0).getSocket());
         Map<String, Integer> cards1 = cardsCount.get(players.get(0).getSocket());
         cards1.put(player1, cards1.get(player1) - 1);

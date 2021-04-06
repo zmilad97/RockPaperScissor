@@ -1,3 +1,6 @@
+import model.Game;
+import model.Room;
+
 import java.util.List;
 import java.util.Map;
 

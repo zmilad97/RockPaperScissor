@@ -1,7 +1,11 @@
+package model;
+
+import org.apache.commons.lang3.RandomStringUtils;
+import service.GameService;
+
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.UUID;
 
 public class Game extends Thread {
 
@@ -12,7 +16,7 @@ public class Game extends Thread {
     private Map<Player, String> result = new HashMap<>();
 
     public Game(String roomId, Player player1, Player player2) {
-        this.gameId = UUID.randomUUID().toString();
+        this.gameId = RandomStringUtils.random(6);
         this.roomId = roomId;
         this.player1 = player1;
         this.player2 = player2;

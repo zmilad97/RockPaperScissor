@@ -1,12 +1,16 @@
-import javax.annotation.processing.Generated;
-import java.io.*;
+package model;
+
+import org.apache.commons.lang3.RandomStringUtils;
+
+import java.io.BufferedReader;
+import java.io.DataOutputStream;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.net.Socket;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.UUID;
 
 public class Player {
-
     private String Id;
     private String name;
     private Socket socket;
@@ -15,15 +19,8 @@ public class Player {
     private Map<String, Integer> cardsCount = new HashMap<>();
     private int lives  = 3;
 
-    public Player(Socket socket) {
-        Id = UUID.randomUUID().toString();
-        this.socket = socket;
-        try {
-            dos = new DataOutputStream(this.socket.getOutputStream());
-            br = new BufferedReader(new InputStreamReader(this.socket.getInputStream()));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+    public Player() {
+        Id = RandomStringUtils.random(8,true,true);
         this.cardsCount.put("Rock", 12);
         this.cardsCount.put("Paper", 12);
         this.cardsCount.put("Scissor", 12);
@@ -47,6 +44,12 @@ public class Player {
 
     public void setSocket(Socket socket) {
         this.socket = socket;
+        try {
+            dos = new DataOutputStream(this.socket.getOutputStream());
+            br = new BufferedReader(new InputStreamReader(this.socket.getInputStream()));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     public Map<String, Integer> getCardsCount() {

@@ -1,3 +1,8 @@
+package service;
+
+import model.Player;
+import model.Room;
+
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
 import java.io.IOException;
@@ -20,14 +25,14 @@ public class UserService extends Thread {
             dos.writeChars("\nEnter Your Name : ");
             player.setName(br.readLine());
             String answer = "";
-            dos.writeChars("\nEnter The Number : \n1 - Create a Room\n2 - Join a Room\n3 - Quit\n");
+            dos.writeChars("\nEnter The Number : \n1 - Create a model.Room\n2 - Join a model.Room\n3 - Quit\n");
             answer = br.readLine();
             if ((answer).equals("1"))
                 createRoom();
             else if ((answer).equals("2"))
                 joinRoom();
             else {
-                System.out.println("\nPlayer (" + player.getId() + ") has left !");
+                System.out.println("\nmodel.Player (" + player.getId() + ") has left !");
                 player.getSocket().close();
 
             }
@@ -44,7 +49,7 @@ public class UserService extends Thread {
         int players = 2;
         String name;
         try {
-            dos.writeChars("\nPlease Enter The Room Name : ");
+            dos.writeChars("\nPlease Enter The model.Room Name : ");
             name = br.readLine();
             dos.writeChars("\n1 - public \nOR\n2 - private\n");
             if (br.readLine().equals("2"))
@@ -76,7 +81,7 @@ public class UserService extends Thread {
         if (br.readLine().equals("1"))
             roomList();
         else {
-            dos.writeChars("\n Enter Room Id : ");
+            dos.writeChars("\n Enter model.Room Id : ");
             roomId = br.readLine();
             GameService.findRoom(roomId).addPlayer(player);
             GameService.roomPlayerMap.put(GameService.findRoom(roomId), player);
