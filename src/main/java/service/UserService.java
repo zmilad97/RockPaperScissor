@@ -65,7 +65,7 @@ public class UserService extends Thread {
             Room room = new Room(isPublic, players, name);
             GameService.openRooms.put(room.getId(), room);
             room.addPlayer(player);
-            room.setCreator(player);
+            room.setAdmin(player);
             GameService.roomPlayerMap.put(room, player);
             dos.writeChars("\nthe room id is : " + room.getId() + "\nshare it with your friends... \n");
         } catch (NumberFormatException e) {
@@ -96,7 +96,7 @@ public class UserService extends Thread {
         });
         roomList.forEach(r -> {
             try {
-                dos.writeChars("\n" + roomList.indexOf(r) + " - " + r.getName() + " Made By : " + r.getCreator() + "\n");
+                dos.writeChars("\n" + roomList.indexOf(r) + " - " + r.getName() + " Made By : " + r.getAdmin() + "\n");
             } catch (IOException e) {
                 e.printStackTrace();
             }

@@ -6,26 +6,24 @@ import java.io.IOException;
 import java.util.*;
 
 public class Room {
-    private final String id;
+    private String id;
     private String name;
-    private Player creator;
+    private Player admin;
     private boolean isPublic;
-    private final int playerCount;
+    private int playerCount;
     private List<Player> players;
     private List<Game> games;
 
+    public Room() {
+    }
 
     public Room(boolean isPublic, int playerCount, String name) {
         this.isPublic = isPublic;
-        this.id = RandomStringUtils.random(5,true,true);
+        this.id = RandomStringUtils.random(5, true, true);
         this.name = name;
         this.playerCount = playerCount;
         players = new ArrayList<>();
         games = new ArrayList<>();
-    }
-
-    public String getId() {
-        return id;
     }
 
 
@@ -62,61 +60,61 @@ public class Room {
                 e.printStackTrace();
             }
         });
-            if (players.size() == playerCount) {
-                Map<String, Integer> cards = cardsCount();
-                if (players.size() > 1) {
-                    players.forEach(p -> {
-                        try {
-                            p.getDos().writeChars("\n\nTotal Cards : Rock = " + cards.get("Rock")
-                                    + " | Paper = " + cards.get("Paper") + " | Scissor = " + cards.get("Scissor"));
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        }
-                    });
-                } else {
-                    win = true;
-                }
-                /**
-                 * here matched players enter the game
-                 */
-                Map<Player, Player> matchedPlayers = matchingPlayers();
-                matchedPlayers.forEach((k, v) -> {
-                    if (!k.equals(v)) {
-                        Game game = new Game(id, k, v);
-                        game.start();
-                        games.add(game);
-                    } else {
-                        try {
-                            System.out.println(k.getName() + " : is on the rest this round");
-                            k.getDos().writeChars("\nyou are on rest on this round");
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        }
-                    }
-                });
-
-
+        if (players.size() == playerCount) {
+            Map<String, Integer> cards = cardsCount();
+            if (players.size() > 1) {
                 players.forEach(p -> {
-                    if (p.getLives() == 0) {
-
-                        try {
-                            p.getDos().writeChars("\nyou lost ! you have no more lives .");
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        }
-                    } else if (p.getCardsCount().get("Rock") == 0 &&
-                            p.getCardsCount().get("Paper") == 0 &&
-                            p.getCardsCount().get("Scissor") == 0 &&
-                            p.getLives() < 3) {
-
-                        try {
-                            p.getDos().writeChars("you lost ! you have no more cards .");
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        }
+                    try {
+                        p.getDos().writeChars("\n\nTotal Cards : Rock = " + cards.get("Rock")
+                                + " | Paper = " + cards.get("Paper") + " | Scissor = " + cards.get("Scissor"));
+                    } catch (IOException e) {
+                        e.printStackTrace();
                     }
                 });
+            } else {
+                win = true;
             }
+            /**
+             * here matched players enter the game
+             */
+            Map<Player, Player> matchedPlayers = matchingPlayers();
+            matchedPlayers.forEach((k, v) -> {
+                if (!k.equals(v)) {
+                    Game game = new Game(id, k, v);
+                    game.start();
+                    games.add(game);
+                } else {
+                    try {
+                        System.out.println(k.getName() + " : is on the rest this round");
+                        k.getDos().writeChars("\nyou are on rest on this round");
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+            });
+
+
+            players.forEach(p -> {
+                if (p.getLives() == 0) {
+
+                    try {
+                        p.getDos().writeChars("\nyou lost ! you have no more lives .");
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                } else if (p.getCardsCount().get("Rock") == 0 &&
+                        p.getCardsCount().get("Paper") == 0 &&
+                        p.getCardsCount().get("Scissor") == 0 &&
+                        p.getLives() < 3) {
+
+                    try {
+                        p.getDos().writeChars("you lost ! you have no more cards .");
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+            });
+        }
     }
 
 
@@ -162,6 +160,13 @@ public class Room {
         return playerMap;
     }
 
+    public String getId() {
+        return id;
+    }
+
+    public void setId() {
+        this.id = RandomStringUtils.random(5, true, true);
+    }
 
     public int getPlayerCount() {
         return playerCount;
@@ -199,11 +204,15 @@ public class Room {
         isPublic = aPublic;
     }
 
-    public Player getCreator() {
-        return creator;
+    public Player getAdmin() {
+        return admin;
     }
 
-    public void setCreator(Player creator) {
-        this.creator = creator;
+    public void setAdmin(Player admin) {
+        this.admin = admin;
+    }
+
+    public void setPlayerCount(int playerCount) {
+        this.playerCount = playerCount;
     }
 }
