@@ -40,10 +40,8 @@ public class Server {
                 return "Hello " + name + " your id is : " + playerId + "\n Join a room with room id or\n Select from available rooms ";
             }));
 
-            post("/room/create", ((request, response) -> {
-                roomService.CreateRoom(gson.fromJson(request.body(),HashMap.class));
-                return response.status();
-            }));
+            post("/room/create", ((request, response)
+                    -> roomService.CreateRoom(gson.fromJson(request.body(), HashMap.class))));
 
             post("/room/join/:roomId", (request, response) -> {
                 return response.status();

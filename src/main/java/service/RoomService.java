@@ -21,8 +21,7 @@ public class RoomService {
     }
 
     @Provides
-    public void CreateRoom(HashMap<String, Object> body) {
-        System.out.println("entered create room");
+    public String CreateRoom(HashMap<String, Object> body) {
         Room room = new Room();
         room.setId();
         room.setName((String) body.get("name"));
@@ -30,7 +29,10 @@ public class RoomService {
         room.setGames(new ArrayList<>());
         room.setPlayers(new ArrayList<>());
         room.setPublic((Boolean) body.get("isPublic"));
-        room.setPlayerCount((Integer) body.get("playerCount"));
+        double count = (double) body.get("playerCount");
+        room.setPlayerCount((int) count);
         GameService.openRooms.put(room.getId(), room);
+        LOGGER.info("The room with id : " + room.getId() + " Created by player with id : " + room.getAdmin().getId());
+        return room.getId();
     }
 }
