@@ -27,11 +27,17 @@ public class Server {
     }
 
     public Server() throws Exception {
+        /**
+         * Injections
+         */
         Injector injector = Guice.createInjector();
         roomService = injector.getInstance(RoomService.class);
         playerService = injector.getInstance(PlayerService.class);
         gson = injector.getInstance(Gson.class);
 
+        /**
+         * Route Mapping
+         */
         path("/api", () -> {
             get("/hello", ((request, response) -> "hello World"));
             post("/login", ((request, response) -> {
@@ -41,11 +47,9 @@ public class Server {
             }));
 
             post("/room/create", ((request, response)
-                    -> roomService.CreateRoom(gson.fromJson(request.body(), HashMap.class))));
+                    -> "if you want to play too use join link and this id :" + roomService.CreateRoom(gson.fromJson(request.body(), HashMap.class))));
 
-            post("/room/join/:roomId", (request, response) -> {
-                return response.status();
-            });
+            post("/room/join/:roomId", (request, response) -> response.status());
 
         });
 
