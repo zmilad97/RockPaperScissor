@@ -5,7 +5,7 @@ It's a different Rock,Paper,Scissor game that built using java.
 
 ## Getting Started
 
-### Start Server
+### Start com.github.zmilad97.rps.Server
 build a jar file and run it using below commands
 
 ```
@@ -27,13 +27,13 @@ telnet localhost 6060
 
 
 
-## model.Game Details
+## com.github.zmilad97.rps.model.Game Details
 Players have limited cards of each rock, paper and scissor and all cards count shows before every game
 Each player has 3 lives.
 
 ### Lose Condition
-The model.Player lost if he left with 0 life or ran out of cards and his life was under 3.
+The com.github.zmilad97.rps.model.Player lost if he left with 0 life or ran out of cards and his life was under 3.
 
 ### Win condition
-model.Player win if he has 3 or more lives and ran out of cards or all player left and he has 3 or more lives.
+com.github.zmilad97.rps.model.Player win if he has 3 or more lives and ran out of cards or all player left and he has 3 or more lives.
 

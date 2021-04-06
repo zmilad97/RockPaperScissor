@@ -1,5 +1,7 @@
-import model.Game;
-import model.Room;
+package com.github.zmilad97.rps;
+
+import com.github.zmilad97.rps.model.Game;
+import com.github.zmilad97.rps.model.Room;
 
 import java.util.List;
 import java.util.Map;

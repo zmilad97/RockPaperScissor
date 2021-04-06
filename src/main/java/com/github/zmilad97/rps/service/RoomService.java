@@ -1,9 +1,9 @@
-package service;
+package com.github.zmilad97.rps.service;
 
 
 import com.google.inject.Inject;
 import com.google.inject.Provides;
-import model.Room;
+import com.github.zmilad97.rps.model.Room;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

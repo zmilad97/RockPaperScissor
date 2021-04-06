@@ -1,4 +1,4 @@
-package model;
+package com.github.zmilad97.rps.model;
 
 import org.apache.commons.lang3.RandomStringUtils;
 
@@ -31,12 +31,12 @@ public class Room {
         if (this.players.size() != playerCount) {
             this.players.add(player);
             int needPlayer = playerCount - this.players.size();
-            player.getDos().writeChars("\nYou Entered The model.Room : " + this.name + "\n" +
-                    "\nYou Are model.Player Number " + players.size() + " Waiting For " + needPlayer + " More Players");
+            player.getDos().writeChars("\nYou Entered The com.github.zmilad97.rps.model.Room : " + this.name + "\n" +
+                    "\nYou Are com.github.zmilad97.rps.model.Player Number " + players.size() + " Waiting For " + needPlayer + " More Players");
             this.players.forEach(p -> {
                 try {
                     if (!p.equals(player))
-                        p.getDos().writeChars("\nmodel.Player Number " + this.players.size() + " Entered" +
+                        p.getDos().writeChars("\ncom.github.zmilad97.rps.model.Player Number " + this.players.size() + " Entered" +
                                 " Waiting For " + needPlayer + " More Players");
                 } catch (IOException e) {
                     e.printStackTrace();
@@ -46,7 +46,7 @@ public class Room {
                 startGame();
 
         } else {
-            player.getDos().writeChars("\nThe model.Room Is Full");
+            player.getDos().writeChars("\nThe com.github.zmilad97.rps.model.Room Is Full");
         }
     }
 
@@ -55,7 +55,7 @@ public class Room {
         boolean win = false;
         players.forEach(p -> {
             try {
-                p.getDos().writeChars("\nThe model.Game Started ! Be Ready ...\n");
+                p.getDos().writeChars("\nThe com.github.zmilad97.rps.model.Game Started ! Be Ready ...\n");
             } catch (IOException e) {
                 e.printStackTrace();
             }

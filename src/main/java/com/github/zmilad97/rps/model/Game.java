@@ -1,7 +1,7 @@
-package model;
+package com.github.zmilad97.rps.model;
 
 import org.apache.commons.lang3.RandomStringUtils;
-import service.GameService;
+import com.github.zmilad97.rps.service.GameService;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -14,6 +14,10 @@ public class Game extends Thread {
     private Player player1;
     private Player player2;
     private Map<Player, String> result = new HashMap<>();
+
+    public Game() {
+        roomId="";
+    }
 
     public Game(String roomId, Player player1, Player player2) {
         this.gameId = RandomStringUtils.random(6);
@@ -35,16 +39,16 @@ public class Game extends Thread {
 
     private void checkWin(String player1Answer, String player2Answer) {
 
-        switch (player1Answer) {
-            case "r" -> player1.cardsMinus("Rock");
-            case "p" -> player1.cardsMinus("Paper");
-            case "s" -> player1.cardsMinus("Scissor");
-        }
-        switch (player2Answer) {
-            case "r" -> player2.cardsMinus("Rock");
-            case "p" -> player2.cardsMinus("Paper");
-            case "s" -> player2.cardsMinus("Scissor");
-        }
+//        switch (player1Answer) {
+//            case "r" -> player1.cardsMinus("Rock");
+//            case "p" -> player1.cardsMinus("Paper");
+//            case "s" -> player1.cardsMinus("Scissor");
+//        }
+//        switch (player2Answer) {
+//            case "r" -> player2.cardsMinus("Rock");
+//            case "p" -> player2.cardsMinus("Paper");
+//            case "s" -> player2.cardsMinus("Scissor");
+//        }
 
         if (player1Answer.equals(player2Answer)) {
             result.put(player1, "draw");

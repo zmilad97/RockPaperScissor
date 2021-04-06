@@ -1,7 +1,7 @@
-package service;
+package com.github.zmilad97.rps.service;
 
-import model.Player;
-import model.Room;
+import com.github.zmilad97.rps.model.Player;
+import com.github.zmilad97.rps.model.Room;
 
 import java.util.ArrayList;
 import java.util.HashMap;

@@ -1,7 +1,7 @@
-package service;
+package com.github.zmilad97.rps.service;
 
 import com.google.inject.Provides;
-import model.Player;
+import com.github.zmilad97.rps.model.Player;
 
 import java.util.List;
 
