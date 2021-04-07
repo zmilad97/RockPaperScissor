@@ -38,20 +38,7 @@ public class Server {
         /**
          * Route Mapping
          */
-        path("/api", () -> {
-            get("/hello", ((request, response) -> "hello World"));
-            post("/login", ((request, response) -> {
-                String name = gson.fromJson(request.body(), HashMap.class).get("name").toString();
-                String playerId = playerService.createPlayer(name);
-                return "Hello " + name + " your id is : " + playerId + "\n Join a room with room id or\n Select from available rooms ";
-            }));
 
-            post("/room/create", ((request, response)
-                    -> "if you want to play too use join link and this id :" + roomService.CreateRoom(gson.fromJson(request.body(), HashMap.class))));
-
-            post("/room/join/:roomId", (request, response) -> response.status());
-
-        });
 
 
         ServerSocket serverSocket = new ServerSocket(port);
