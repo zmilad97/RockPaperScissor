@@ -19,13 +19,20 @@ public class RoomController {
         this.playerService = playerService;
     }
 
-    public String handleLogin(Request request, Response response) {
+    public Response handleLogin(Request request, Response response) {
         String name = gson.fromJson(request.body(), HashMap.class).get("name").toString();
         String playerId = playerService.createPlayer(name);
-        return "Hello " + name + " your id is : " + playerId + "\n Join a room with room id or\n Select from available rooms ";
+        response.body("Hello " + name + " your id is : " + playerId + "\n Join a room with room id or\n Select from available rooms ");
+        return response;
     }
 
-    public String handleCreateRoom(Request request, Response response) {
-        return "if you want to play too use join link and this id :" + roomService.CreateRoom(gson.fromJson(request.body(), HashMap.class));
+    public Response handleCreateRoom(Request request, Response response) {
+        response.body("room id : " + roomService.CreateRoom(gson.fromJson(request.body(), HashMap.class)));
+        return response;
+    }
+
+    public Response allRoom(Request request, Response response) {
+        response.body(roomService.allRooms().toString());
+        return response;
     }
 }

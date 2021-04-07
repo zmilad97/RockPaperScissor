@@ -1,6 +1,8 @@
 package controller;
 
 import com.google.gson.Gson;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import service.PlayerService;
 import service.RoomService;
 
@@ -19,6 +21,7 @@ public class WebStarter {
             get("/hello", ((request, response) -> "hello World"));
             post("/login", (roomController::handleLogin));
             post("/room/create", (roomController::handleCreateRoom));
+            get("/room/all", roomController::allRoom);
             post("/room/join/:roomId", (request, response) -> response.status());
 
         });

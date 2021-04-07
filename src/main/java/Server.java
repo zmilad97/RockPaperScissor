@@ -1,6 +1,5 @@
 import com.google.gson.Gson;
-import com.google.inject.Guice;
-import com.google.inject.Injector;
+import controller.WebStarter;
 import model.Player;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -10,9 +9,6 @@ import service.UserService;
 
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.util.HashMap;
-
-import static spark.Spark.*;
 
 public class Server {
     private final String ip = "localhost";
@@ -20,6 +16,7 @@ public class Server {
     private final RoomService roomService;
     private final PlayerService playerService;
     private final Gson gson;
+    private final WebStarter webStarter;
     private static final Logger LOGGER = LoggerFactory.getLogger(Server.class);
 
     public static void main(String[] args) throws Exception {
@@ -27,19 +24,11 @@ public class Server {
     }
 
     public Server() throws Exception {
-        /**
-         * Injections
-         */
-        Injector injector = Guice.createInjector();
-        roomService = injector.getInstance(RoomService.class);
-        playerService = injector.getInstance(PlayerService.class);
-        gson = injector.getInstance(Gson.class);
 
-        /**
-         * Route Mapping
-         */
-
-
+        gson = new Gson();
+        playerService = new PlayerService();
+        roomService = new RoomService(playerService);
+        webStarter = new WebStarter(gson, playerService, roomService);
 
         ServerSocket serverSocket = new ServerSocket(port);
 
