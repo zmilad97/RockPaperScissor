@@ -1,8 +1,7 @@
 import com.google.gson.Gson;
 import controller.WebStarter;
+import lombok.extern.slf4j.Slf4j;
 import model.Player;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import service.PlayerService;
 import service.RoomService;
 import service.UserService;
@@ -10,6 +9,7 @@ import service.UserService;
 import java.net.ServerSocket;
 import java.net.Socket;
 
+@Slf4j
 public class Server {
     private final String ip = "localhost";
     private final int port = 6060;
@@ -17,20 +17,18 @@ public class Server {
     private final PlayerService playerService;
     private final Gson gson;
     private final WebStarter webStarter;
-    private static final Logger LOGGER = LoggerFactory.getLogger(Server.class);
+    private final ServerSocket serverSocket;
 
     public static void main(String[] args) throws Exception {
         Server server = new Server();
     }
 
     public Server() throws Exception {
-
+        serverSocket = new ServerSocket(port);
         gson = new Gson();
         playerService = new PlayerService();
         roomService = new RoomService(playerService);
         webStarter = new WebStarter(gson, playerService, roomService);
-
-        ServerSocket serverSocket = new ServerSocket(port);
 
         while (!serverSocket.isClosed()) {
             Socket socket = serverSocket.accept();

@@ -1,12 +1,14 @@
 package controller;
 
 import com.google.gson.Gson;
+import model.Room;
 import service.PlayerService;
 import service.RoomService;
 import spark.Request;
 import spark.Response;
 
 import java.util.HashMap;
+import java.util.List;
 
 public class RoomController {
     private final Gson gson;
@@ -19,20 +21,23 @@ public class RoomController {
         this.playerService = playerService;
     }
 
-    public Response handleLogin(Request request, Response response) {
+    public String handleLogin(Request request, Response response) {
         String name = gson.fromJson(request.body(), HashMap.class).get("name").toString();
         String playerId = playerService.createPlayer(name);
         response.body("Hello " + name + " your id is : " + playerId + "\n Join a room with room id or\n Select from available rooms ");
-        return response;
+        return response.body();
     }
 
-    public Response handleCreateRoom(Request request, Response response) {
-        response.body("room id : " + roomService.CreateRoom(gson.fromJson(request.body(), HashMap.class)));
-        return response;
+    public String handleCreateRoom(Request request, Response response) {
+        return "room id : " + roomService.CreateRoom(gson.fromJson(request.body(), HashMap.class));
     }
 
-    public Response allRoom(Request request, Response response) {
-        response.body(roomService.allRooms().toString());
-        return response;
+    public List<String> allRoom(Request request, Response response) {
+        return roomService.allRooms();
+    }
+
+    public String joinRoom(Request request, Response response) {
+        roomService.playerJoin(request.params("roomId"), gson.fromJson(request.body(), HashMap.class).get("playerId").toString());
+        return "you joined";
     }
 }

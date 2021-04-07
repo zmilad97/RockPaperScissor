@@ -1,16 +1,17 @@
 package service;
 
 
-import com.google.inject.Inject;
-import com.google.inject.Provides;
-import model.Game;
 import model.Room;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.IOException;
+import java.net.ServerSocket;
+import java.net.Socket;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 
 public class RoomService {
@@ -36,9 +37,18 @@ public class RoomService {
         return room.getId();
     }
 
-    public List<Room> allRooms() {
-        List<Room> rooms = new ArrayList<>();
-        GameService.openRooms.forEach((k, v) -> rooms.add(v));
-        return rooms;
+    public List<String> allRooms() {
+        List<String> roomList = new ArrayList<>();
+        GameService.openRooms.forEach((k, v) -> roomList.add(roomList.size()+1 + " - Room : (" + v.getName() + ") Made by : (" + v.getAdmin().getName() + ")"));
+        return roomList;
+    }
+
+    public void playerJoin(String roomId, String playerId) {
+        try {
+//            playerService.findPlayer(playerId).setSocket(socket);
+            GameService.findRoom(roomId).addPlayer(playerService.findPlayer(playerId));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }

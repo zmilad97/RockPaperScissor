@@ -22,7 +22,7 @@ public class WebStarter {
             post("/login", (roomController::handleLogin));
             post("/room/create", (roomController::handleCreateRoom));
             get("/room/all", roomController::allRoom);
-            post("/room/join/:roomId", (request, response) -> response.status());
+            post("/room/join/:roomId", roomController::joinRoom);
 
         });
 
