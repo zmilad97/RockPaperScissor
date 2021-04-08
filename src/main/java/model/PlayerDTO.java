@@ -2,31 +2,28 @@ package model;
 
 import org.apache.commons.lang3.RandomStringUtils;
 
-import java.io.BufferedReader;
-import java.io.DataOutputStream;
-import java.net.Socket;
 import java.util.HashMap;
 import java.util.Map;
 
 public class PlayerDTO {
-    private String Id;
+    private String id;
     private String name;
     private Map<String, Integer> cardsCount;
     private int lives;
 
     public PlayerDTO(String name) {
-        Id = RandomStringUtils.random(8, true, true);
+        id = RandomStringUtils.random(8, true, true);
         this.name = name;
         this.cardsCount = new HashMap<>();
         this.lives = 3;
     }
 
     public String getId() {
-        return Id;
+        return id;
     }
 
     public void setId(String id) {
-        Id = id;
+        this.id = id;
     }
 
     public String getName() {

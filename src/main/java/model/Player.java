@@ -1,7 +1,5 @@
 package model;
 
-import org.apache.commons.lang3.RandomStringUtils;
-
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
 import java.io.IOException;
@@ -11,7 +9,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class Player {
-    private String Id;
+    private String id;
     private String name;
     private Socket socket;
     private DataOutputStream dos;
@@ -20,7 +18,7 @@ public class Player {
     private int lives = 3;
 
     public Player(PlayerDTO playerDTO) {
-        this.Id = playerDTO.getId();
+        this.id = playerDTO.getId();
         this.name = playerDTO.getName();
         this.cardsCount = playerDTO.getCardsCount();
         this.lives = playerDTO.getLives();
@@ -34,11 +32,11 @@ public class Player {
     }
 
     public String getId() {
-        return Id;
+        return id;
     }
 
     public void setId(String id) {
-        Id = id;
+        this.id = id;
     }
 
     public Socket getSocket() {
