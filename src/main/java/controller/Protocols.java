@@ -1,29 +1,34 @@
 package controller;
 
 public class Protocols {
-    public static String parseCommand(String request) {
-        String[] command = request.split(" ");
+    private String[] command;
+
+    public String parseCommand(String request) {
+        command = request.split(" ");
         switch (command[0]) {
             case "JOIN" -> joinRoom();
             case "START" -> startGame();
             case "HAND" -> hand();
+            case "LEAVE" -> leave();
             case "EXIT" -> exit();
         }
         return null;
     }
 
-    private static void exit() {
+    private void joinRoom() {
     }
 
-    private static void hand() {
+    private void leave() {
+    }
+
+    private void exit() {
+    }
+
+    private void hand() {
 
     }
 
     private static void startGame() {
-
-    }
-
-    private static void joinRoom() {
 
     }
 

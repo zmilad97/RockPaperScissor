@@ -12,12 +12,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class UserService extends Thread {
-
+    private Protocols protocols;
     private Player player;
     private DataOutputStream dos;
     private BufferedReader br;
 
     public UserService(Player player) {
+        this.protocols = new Protocols();
         this.player = player;
         dos = player.getDos();
         br = player.getBr();
@@ -26,7 +27,7 @@ public class UserService extends Thread {
     @SneakyThrows
     public void run() {
         while (player.getSocket().isConnected()) {
-            Protocols.parseCommand(br.readLine());
+            protocols.parseCommand(br.readLine());
         }
 //        try {
 //            dos.writeChars("\nEnter Your Name : ");
