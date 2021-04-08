@@ -12,14 +12,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class UserService extends Thread {
-    private Protocols protocols;
-    private Player player;
-    private DataOutputStream dos;
-    private BufferedReader br;
+    private final Protocols protocols;
+    private final Player player;
+    private final DataOutputStream dos;
+    private final BufferedReader br;
 
     public UserService(Player player) {
-        this.protocols = new Protocols();
         this.player = player;
+        this.protocols = new Protocols(player);
         dos = player.getDos();
         br = player.getBr();
     }
@@ -70,7 +70,7 @@ public class UserService extends Thread {
             if (str > 2)
                 players = str;
             Room room = new Room(isPublic, players, name);
-            GameService.openRooms.put(room.getId(), room);
+            GameService.rooms.put(room.getId(), room);
             room.addPlayer(player);
             room.setAdmin(player);
             GameService.roomPlayerMap.put(room, player);
@@ -97,7 +97,7 @@ public class UserService extends Thread {
 
     private void roomList() throws IOException {
         List<Room> roomList = new ArrayList<>();
-        GameService.openRooms.forEach((k, v) -> {
+        GameService.rooms.forEach((k, v) -> {
             if (v.isPublic())
                 roomList.add(v);
         });

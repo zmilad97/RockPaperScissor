@@ -3,22 +3,23 @@ package service;
 import model.Player;
 import model.PlayerDTO;
 import model.Room;
+import model.RoomDTO;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 
 public class GameService {
 
-    public static Map<String, Room> openRooms = new HashMap<>();
+    public static Map<String, Room> rooms = new HashMap<>();
+    public static Map<String, Player> players = new HashMap<>();
+    public static Map<String , RoomDTO> roomDTOs = new HashMap<>();
+    public static Map<String, PlayerDTO> playerDTOS = new HashMap<>();
+
     public static Map<Room, Player> roomPlayerMap = new HashMap<>();
-    public static List<Player> players = new ArrayList<>();
-    public static List<PlayerDTO> playerDTOS = new ArrayList<>();
 
     public static Room findRoom(String id) {
-        return GameService.openRooms.get(id);
+        return GameService.rooms.get(id);
     }
 
 

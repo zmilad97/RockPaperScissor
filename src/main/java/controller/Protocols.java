@@ -1,7 +1,17 @@
 package controller;
 
+import lombok.SneakyThrows;
+import model.Player;
+import service.GameService;
+
 public class Protocols {
     private String[] command;
+    private final Player player;
+
+    public Protocols(Player player) {
+        this.player = player;
+    }
+
 
     public String parseCommand(String request) {
         command = request.split(" ");
@@ -15,7 +25,9 @@ public class Protocols {
         return null;
     }
 
+    @SneakyThrows
     private void joinRoom() {
+        GameService.rooms.get(command[1]).addPlayer(player);
     }
 
     private void leave() {

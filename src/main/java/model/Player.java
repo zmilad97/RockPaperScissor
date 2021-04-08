@@ -17,17 +17,20 @@ public class Player {
     private DataOutputStream dos;
     private BufferedReader br;
     private Map<String, Integer> cardsCount = new HashMap<>();
-    private int lives  = 3;
+    private int lives = 3;
 
-    public Player() {
-        Id = RandomStringUtils.random(8,true,true);
-        this.cardsCount.put("Rock", 12);
-        this.cardsCount.put("Paper", 12);
-        this.cardsCount.put("Scissor", 12);
+    public Player(PlayerDTO playerDTO) {
+        this.Id = playerDTO.getId();
+        this.name = playerDTO.getName();
+        this.cardsCount = playerDTO.getCardsCount();
+        this.lives = playerDTO.getLives();
+    }
+    public Player(){
+
     }
 
-    public void cardsMinus(String card){
-        cardsCount.put(card,cardsCount.get(card)-1);
+    public void cardsMinus(String card) {
+        cardsCount.put(card, cardsCount.get(card) - 1);
     }
 
     public String getId() {

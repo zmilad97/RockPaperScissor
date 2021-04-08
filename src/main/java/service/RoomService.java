@@ -6,12 +6,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
-import java.net.ServerSocket;
-import java.net.Socket;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 
 public class RoomService {
@@ -32,14 +29,14 @@ public class RoomService {
         room.setPublic((Boolean) body.get("isPublic"));
         double count = (double) body.get("playerCount");
         room.setPlayerCount((int) count);
-        GameService.openRooms.put(room.getId(), room);
+        GameService.rooms.put(room.getId(), room);
         LOGGER.info("The room with id : " + room.getId() + " Created by player with id : " + room.getAdmin().getId());
         return room.getId();
     }
 
     public List<String> allRooms() {
         List<String> roomList = new ArrayList<>();
-        GameService.openRooms.forEach((k, v) -> roomList.add(roomList.size()+1 + " - Room : (" + v.getName() + ") Made by : (" + v.getAdmin().getName() + ")"));
+        GameService.rooms.forEach((k, v) -> roomList.add(roomList.size()+1 + " - Room : (" + v.getName() + ") Made by : (" + v.getAdmin().getName() + ")"));
         return roomList;
     }
 
