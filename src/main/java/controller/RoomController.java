@@ -2,6 +2,7 @@ package controller;
 
 import com.google.gson.Gson;
 import model.Room;
+import model.RoomDTO;
 import service.PlayerService;
 import service.RoomService;
 import spark.Request;
@@ -29,7 +30,7 @@ public class RoomController {
     }
 
     public String handleCreateRoom(Request request, Response response) {
-        return "room id : " + roomService.CreateRoom(gson.fromJson(request.body(), HashMap.class));
+        return "room id : " + roomService.createRoom(gson.fromJson(request.body(), RoomDTO.class));
     }
 
     public List<String> allRoom(Request request, Response response) {

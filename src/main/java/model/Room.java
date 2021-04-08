@@ -1,20 +1,28 @@
 package model;
 
 import org.apache.commons.lang3.RandomStringUtils;
+import service.GameService;
 
 import java.io.IOException;
 import java.util.*;
 
 public class Room {
-    private String id;
-    private String name;
+    private final String id;
+    private final String name;
     private Player admin;
-    private boolean isPublic;
-    private int playerCount;
-    private List<Player> players;
+    private final boolean isPublic;
+    private final int playerCount;
     private List<Game> games;
+    private List<Player> players;
+    private final Map<String, Integer> cardsCount;
 
-    public Room() {
+    public Room(RoomDTO roomDTO) {
+        this.id = roomDTO.getId();
+        this.name = roomDTO.getName();
+        this.admin = GameService.players.get(roomDTO.getAdmin().getId());
+        this.isPublic = roomDTO.isPublic();
+        this.playerCount = roomDTO.getPlayerCount();
+        this.cardsCount = roomDTO.getCardsCount();
     }
 
     public Room(boolean isPublic, int playerCount, String name) {
@@ -24,6 +32,7 @@ public class Room {
         this.playerCount = playerCount;
         players = new ArrayList<>();
         games = new ArrayList<>();
+        cardsCount = new HashMap<>();
     }
 
 
@@ -164,9 +173,6 @@ public class Room {
         return id;
     }
 
-    public void setId() {
-        this.id = RandomStringUtils.random(5, true, true);
-    }
 
     public int getPlayerCount() {
         return playerCount;
@@ -196,13 +202,6 @@ public class Room {
         return name;
     }
 
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public void setPublic(boolean aPublic) {
-        isPublic = aPublic;
-    }
 
     public Player getAdmin() {
         return admin;
@@ -212,7 +211,8 @@ public class Room {
         this.admin = admin;
     }
 
-    public void setPlayerCount(int playerCount) {
-        this.playerCount = playerCount;
+    public Map<String, Integer> getCardsCount() {
+        return cardsCount;
     }
+
 }
