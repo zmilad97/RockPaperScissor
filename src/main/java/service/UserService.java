@@ -1,5 +1,7 @@
 package service;
 
+import controller.Protocols;
+import lombok.SneakyThrows;
 import model.Player;
 import model.Room;
 
@@ -8,6 +10,7 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+
 public class UserService extends Thread {
 
     private Player player;
@@ -20,27 +23,30 @@ public class UserService extends Thread {
         br = player.getBr();
     }
 
+    @SneakyThrows
     public void run() {
-        try {
-            dos.writeChars("\nEnter Your Name : ");
-            player.setName(br.readLine());
-            String answer = "";
-            dos.writeChars("\nEnter The Number : \n1 - Create a model.Room\n2 - Join a model.Room\n3 - Quit\n");
-            answer = br.readLine();
-            if ((answer).equals("1"))
-                createRoom();
-            else if ((answer).equals("2"))
-                joinRoom();
-            else {
-                System.out.println("\nmodel.Player (" + player.getId() + ") has left !");
-                player.getSocket().close();
-
-            }
-
-        } catch (IOException e) {
-            e.getLocalizedMessage();
+        while (player.getSocket().isConnected()) {
+            Protocols.parseCommand(br.readLine());
         }
-
+//        try {
+//            dos.writeChars("\nEnter Your Name : ");
+//            player.setName(br.readLine());
+//            String answer = "";
+//            dos.writeChars("\nEnter The Number : \n1 - Create a model.Room\n2 - Join a model.Room\n3 - Quit\n");
+//            answer = br.readLine();
+//            if ((answer).equals("1"))
+//                createRoom();
+//            else if ((answer).equals("2"))
+//                joinRoom();
+//            else {
+//                System.out.println("\nmodel.Player (" + player.getId() + ") has left !");
+//                player.getSocket().close();
+//
+//            }
+//
+//        } catch (IOException e) {
+//            e.getLocalizedMessage();
+//        }
     }
 
     private void createRoom() throws IOException {

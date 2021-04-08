@@ -31,12 +31,9 @@ public class Server {
         webStarter = new WebStarter(gson, playerService, roomService);
 
         while (!serverSocket.isClosed()) {
+            Server.log.info("Server Started : " + serverSocket.getLocalSocketAddress());
             Socket socket = serverSocket.accept();
-            Player player = new Player();
-            System.out.println("\nmodel.Player (" + (player.getSocket().getLocalAddress().toString()).substring(1) + ":"
-                    + socket.getLocalPort() + ") has joined ...");
-            UserService userService = new UserService(player);
-            userService.start();
+            playerService.setSocket(socket);
         }
     }
 }

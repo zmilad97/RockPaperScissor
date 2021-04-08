@@ -1,25 +1,32 @@
 package service;
 
-import com.google.inject.Provides;
 import model.Player;
+import model.PlayerDTO;
 
+import java.net.Socket;
 import java.util.List;
 
 public class PlayerService {
 
 
-    @Provides
     public Player findPlayer(String id) {
         List<Player> players = GameService.players;
         return players.stream().filter(player ->
                 player.getId().equals(id)).findFirst().orElse(null);
     }
 
-    @Provides
     public String createPlayer(String name) {
-        Player player = new Player();
+        PlayerDTO player = new PlayerDTO(name);
         player.setName(name);
-        GameService.players.add(player);
+        GameService.playerDTOS.add(player);
         return player.getId();
     }
+
+    public void setSocket(Socket socket) {
+        Player player = new Player();
+        player.setSocket(socket);
+        UserService userService = new UserService(player);
+        userService.start();
+    }
+
 }

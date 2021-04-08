@@ -1,6 +1,7 @@
 package service;
 
 import model.Player;
+import model.PlayerDTO;
 import model.Room;
 
 import java.util.ArrayList;
@@ -14,6 +15,7 @@ public class GameService {
     public static Map<String, Room> openRooms = new HashMap<>();
     public static Map<Room, Player> roomPlayerMap = new HashMap<>();
     public static List<Player> players = new ArrayList<>();
+    public static List<PlayerDTO> playerDTOS = new ArrayList<>();
 
     public static Room findRoom(String id) {
         return GameService.openRooms.get(id);
