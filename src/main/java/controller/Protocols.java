@@ -8,12 +8,15 @@ import service.GameService;
 @Slf4j
 public class Protocols {
     private String[] command;
-    private final Player player;
+    private Player player;
 
     public Protocols(Player player) {
         this.player = player;
     }
 
+    public Protocols() {
+
+    }
 
     public String parseCommand(String request) {
         if (request != null) {
@@ -28,12 +31,16 @@ public class Protocols {
                 case "HAND" -> {
                     return hand();
                 }
+                case "CARDS" -> {
+                    return cards();
+                }
                 case "LEAVE" -> {
                     return leave();
                 }
                 case "EXIT" -> {
                     return exit();
                 }
+
             }
         }
         return null;
@@ -63,6 +70,7 @@ public class Protocols {
         return null;
     }
 
+    //TODO : fix here
     private String hand() {
         if (command.length >= 2) {
             return command[1];
@@ -70,6 +78,23 @@ public class Protocols {
         return null;
     }
 
+    private String cards() {
+        if (command[1] != null && !command[1].equals(""))
+            switch (command[1]) {
+                case "r" -> {
+                    return "Rock";
+                }
+                case "p" -> {
+                    return "Paper";
+                }
+                case "s" -> {
+                    return "Scissor";
+                }
+            }
+        return "";
+    }
+
+    //TODO : fix here
     private String startGame() {
         return null;
     }
