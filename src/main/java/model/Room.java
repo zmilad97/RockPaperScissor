@@ -24,31 +24,21 @@ public class Room {
         this.playerCount = roomDTO.getPlayerCount();
         this.cardsCount = roomDTO.getCardsCount();
         players = new ArrayList<>();
-    }
-
-/*
-    public Room(boolean isPublic, int playerCount, String name) {
-        this.isPublic = isPublic;
-        this.id = RandomStringUtils.random(5, true, true);
-        this.name = name;
-        this.playerCount = playerCount;
-        players = new ArrayList<>();
         games = new ArrayList<>();
-        cardsCount = new HashMap<>();
     }
-*/
 
 
     public void addPlayer(Player player) throws IOException {
         if (this.players.size() != playerCount) {
             this.players.add(player);
             int needPlayer = playerCount - this.players.size();
-            player.getDos().writeChars("\nYou Entered The model.Room : " + this.name + "\n" +
-                    "\nYou Are model.Player Number " + players.size() + " Waiting For " + needPlayer + " More Players");
+            player.getDos().writeChars("\nYou Entered The Room : " + this.name + "\n" +
+                    "\nYou Are Player Number " + players.size() + " Waiting For " + needPlayer + " More Players");
+            player.setCardsCount(this.cardsCount);
             this.players.forEach(p -> {
                 try {
                     if (!p.equals(player))
-                        p.getDos().writeChars("\nmodel.Player Number " + this.players.size() + " Entered" +
+                        p.getDos().writeChars("\nPlayer Number " + this.players.size() + " Entered" +
                                 " Waiting For " + needPlayer + " More Players");
                 } catch (IOException e) {
                     e.printStackTrace();
@@ -58,7 +48,7 @@ public class Room {
                 startGame();
 
         } else {
-            player.getDos().writeChars("\nThe model.Room Is Full");
+            player.getDos().writeChars("\nThe Room Is Full");
         }
     }
 
@@ -67,7 +57,7 @@ public class Room {
         boolean win = false;
         players.forEach(p -> {
             try {
-                p.getDos().writeChars("\nThe model.Game Started ! Be Ready ...\n");
+                p.getDos().writeChars("\nThe Game Started ! Be Ready ...\n");
             } catch (IOException e) {
                 e.printStackTrace();
             }

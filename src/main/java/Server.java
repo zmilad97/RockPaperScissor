@@ -1,11 +1,8 @@
 import com.google.gson.Gson;
 import controller.WebStarter;
 import lombok.extern.slf4j.Slf4j;
-import model.Player;
-import org.apache.log4j.net.TelnetAppender;
 import service.PlayerService;
 import service.RoomService;
-import service.UserService;
 
 import java.net.ServerSocket;
 import java.net.Socket;

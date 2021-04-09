@@ -16,22 +16,24 @@ public class Protocols {
 
 
     public String parseCommand(String request) {
-        command = request.split(" ");
-        switch (command[0]) {
-            case "JOIN" -> {
-                return joinRoom();
-            }
-            case "START" -> {
-                return startGame();
-            }
-            case "HAND" -> {
-                return hand();
-            }
-            case "LEAVE" -> {
-                return leave();
-            }
-            case "EXIT" -> {
-                return exit();
+        if (request != null) {
+            command = request.split(" ");
+            switch (command[0]) {
+                case "JOIN" -> {
+                    return joinRoom();
+                }
+                case "START" -> {
+                    return startGame();
+                }
+                case "HAND" -> {
+                    return hand();
+                }
+                case "LEAVE" -> {
+                    return leave();
+                }
+                case "EXIT" -> {
+                    return exit();
+                }
             }
         }
         return null;
@@ -43,7 +45,7 @@ public class Protocols {
             GameService.rooms.get(command[1]).addPlayer(player);
             log.info("player : " + player.getName() + " added to room : " + GameService.rooms.get(command[1]));
         }
-        return null;
+        return "null";
     }
 
     private String leave() {

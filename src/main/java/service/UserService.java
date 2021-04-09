@@ -24,10 +24,9 @@ public class UserService extends Thread {
         br = player.getBr();
     }
 
-    @SneakyThrows
     public void run() {
         while (player.getSocket().isConnected()) {
-            protocols.parseCommand(br.readLine());
+            read();
         }
 //        try {
 //            dos.writeChars("\nEnter Your Name : ");
@@ -49,6 +48,13 @@ public class UserService extends Thread {
 //            e.getLocalizedMessage();
 //        }
     }
+
+    @SneakyThrows
+    public void read() {
+        protocols.parseCommand(br.readLine());
+    }
+
+
 
    /* private void createRoom() throws IOException {
         int str;

@@ -25,6 +25,7 @@ public class RoomDTO {
         this.cardsCount = cardsCount;
         admin = GameService.playerDTOS.get(id);
         players = new ArrayList<>();
+        games = new ArrayList<>();
     }
 
     public String getId() {
