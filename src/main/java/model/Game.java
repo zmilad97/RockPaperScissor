@@ -34,19 +34,29 @@ public class Game extends Thread {
 
     }
 
+    @SneakyThrows
     private void checkWin(String player1Answer, String player2Answer) {
-
-        switch (player1Answer) {
-            case "r" -> player1.cardsMinus("Rock");
-            case "p" -> player1.cardsMinus("Paper");
-            case "s" -> player1.cardsMinus("Scissor");
+        if (player1.getCardsCount().get(player1Answer) == 0 && player2.getCardsCount().get(player2Answer) != 0) {
+            result.put(player1, "lost");
+            result.put(player2, "won");
+            handleCards("", player2Answer);
+            handlePlayers();
         }
-        switch (player2Answer) {
-            case "r" -> player2.cardsMinus("Rock");
-            case "p" -> player2.cardsMinus("Paper");
-            case "s" -> player2.cardsMinus("Scissor");
+        if (player2.getCardsCount().get(player1Answer) == 0 && player1.getCardsCount().get(player2Answer) != 0) {
+            result.put(player2, "lost");
+            result.put(player1, "won");
+            handleCards(player1Answer, "");
+            handlePlayers();
+        }
+        if (player2.getCardsCount().get(player1Answer) == 0 && player1.getCardsCount().get(player2Answer) == 0) {
+            result.put(player1, "lost");
+            result.put(player2, "lost");
+            handleCards("", "");
+            handlePlayers();
         }
 
+
+        handleCards(player1Answer, player2Answer);
         if (player1Answer.equals(player2Answer)) {
             result.put(player1, "draw");
             result.put(player2, "draw");
@@ -69,6 +79,27 @@ public class Game extends Thread {
             result.put(player1, "won");
             result.put(player2, "lost");
         }
+        handlePlayers();
+
+    }
+
+    public void handleCards(String player1Answer, String player2Answer) {
+        if (!player1Answer.equals(""))
+            switch (player1Answer) {
+                case "r" -> player1.cardsMinus("Rock");
+                case "p" -> player1.cardsMinus("Paper");
+                case "s" -> player1.cardsMinus("Scissor");
+            }
+        if (!player2Answer.equals(""))
+            switch (player2Answer) {
+                case "r" -> player2.cardsMinus("Rock");
+                case "p" -> player2.cardsMinus("Paper");
+                case "s" -> player2.cardsMinus("Scissor");
+            }
+    }
+
+    @SneakyThrows
+    public void handlePlayers() {
         if (result.get(player1).equals("won")) {
             player1.setLives(player1.getLives() + 1);
             player2.setLives(player2.getLives() - 1);
@@ -77,18 +108,15 @@ public class Game extends Thread {
             player2.setLives(player2.getLives() + 1);
         }
 
-        try {
-            player1.getDos().writeBytes("\n you " + result.get(player1).toUpperCase() + " you have : " + player1.getLives() + " lives\n");
-            player2.getDos().writeBytes("\n you " + result.get(player2).toUpperCase() + " you have : " + player2.getLives() + " lives\n");
 
-            GameService.rooms.get(roomId).addPlayer(player1);
-            GameService.rooms.get(roomId).addPlayer(player2);
+        player1.getDos().writeBytes("\n you " + result.get(player1).toUpperCase() + " you have : " + player1.getLives() + " lives\n");
+        player2.getDos().writeBytes("\n you " + result.get(player2).toUpperCase() + " you have : " + player2.getLives() + " lives\n");
 
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        GameService.rooms.get(roomId).addPlayer(player1);
+        GameService.rooms.get(roomId).addPlayer(player2);
 
     }
+
 
     public String getGameId() {
         return gameId;
