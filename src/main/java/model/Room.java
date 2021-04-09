@@ -1,6 +1,5 @@
 package model;
 
-import org.apache.commons.lang3.RandomStringUtils;
 import service.GameService;
 
 import java.io.IOException;
@@ -34,7 +33,8 @@ public class Room {
             int needPlayer = playerCount - this.players.size();
             player.getDos().writeChars("\nYou Entered The Room : " + this.name + "\n" +
                     "\nYou Are Player Number " + players.size() + " Waiting For " + needPlayer + " More Players");
-            player.setCardsCount(this.cardsCount);
+            if (player.getCardsCount().size() == 0)
+                player.setCardsCount(this.cardsCount.get("Rock"),this.cardsCount.get("Paper"),this.cardsCount.get("Scissor"));
             this.players.forEach(p -> {
                 try {
                     if (!p.equals(player))

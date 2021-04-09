@@ -3,13 +3,9 @@ package service;
 import controller.Protocols;
 import lombok.SneakyThrows;
 import model.Player;
-import model.Room;
 
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 
 public class UserService extends Thread {
     private final Protocols protocols;
@@ -25,9 +21,9 @@ public class UserService extends Thread {
     }
 
     public void run() {
-        while (player.getSocket().isConnected()) {
+//        while (player.getSocket().isConnected()) {
             read();
-        }
+//        }
 //        try {
 //            dos.writeChars("\nEnter Your Name : ");
 //            player.setName(br.readLine());
@@ -39,7 +35,7 @@ public class UserService extends Thread {
 //            else if ((answer).equals("2"))
 //                joinRoom();
 //            else {
-//                System.out.println("\nmodel.Player (" + player.getId() + ") has left !");
+//                System.out.println("\n Player (" + player.getId() + ") has left !");
 //                player.getSocket().close();
 //
 //            }
@@ -50,8 +46,8 @@ public class UserService extends Thread {
     }
 
     @SneakyThrows
-    public void read() {
-        protocols.parseCommand(br.readLine());
+    public String read() {
+        return protocols.parseCommand(br.readLine());
     }
 
 

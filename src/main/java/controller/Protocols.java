@@ -43,7 +43,7 @@ public class Protocols {
     private String joinRoom() {
         if (command.length >= 2) {
             GameService.rooms.get(command[1]).addPlayer(player);
-            log.info("player : " + player.getName() + " added to room : " + GameService.rooms.get(command[1]));
+            log.info("player : " + player.getName() + " added to room : " + GameService.rooms.get(command[1]).getName());
         }
         return "null";
     }
@@ -64,7 +64,9 @@ public class Protocols {
     }
 
     private String hand() {
-
+        if (command.length >= 2) {
+            return command[1];
+        }
         return null;
     }
 

@@ -4,6 +4,7 @@ import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.RandomStringUtils;
 import service.GameService;
+import service.UserService;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -29,8 +30,8 @@ public class Game extends Thread {
     public void run() {
         player1.getDos().writeChars("\n\n\n[R]ock,[P]aper,[S]cissors : ");
         player2.getDos().writeChars("\n\n\n[R]ock,[P]aper,[S]cissors : ");
-
         checkWin(player1.getBr().readLine(), player2.getBr().readLine());
+
     }
 
     private void checkWin(String player1Answer, String player2Answer) {

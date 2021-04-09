@@ -51,8 +51,11 @@ public class Player {
         return cardsCount;
     }
 
-    public void setCardsCount(Map<String, Integer> cardsCount) {
-        this.cardsCount = cardsCount;
+    public void setCardsCount(int r, int p, int s) {
+        this.cardsCount.put("Rock", r);
+        this.cardsCount.put("Paper", p);
+        this.cardsCount.put("Scissor", s);
+
     }
 
     public DataOutputStream getDos() {
