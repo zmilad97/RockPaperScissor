@@ -2,7 +2,6 @@ package service;
 
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
-import model.Game;
 import model.Player;
 import model.PlayerDTO;
 
@@ -40,6 +39,7 @@ public class PlayerService {
         Player player = new Player(GameService.playerDTOS.get(br.readLine()));
         player.setSocket(socket);
         UserService userService = new UserService(player);
+        GameService.playerUserServiceMap.put(player, userService);
         userService.start();
     }
 

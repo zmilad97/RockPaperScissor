@@ -26,6 +26,7 @@ public class Room {
         players = new ArrayList<>();
     }
 
+/*
     public Room(boolean isPublic, int playerCount, String name) {
         this.isPublic = isPublic;
         this.id = RandomStringUtils.random(5, true, true);
@@ -35,6 +36,7 @@ public class Room {
         games = new ArrayList<>();
         cardsCount = new HashMap<>();
     }
+*/
 
 
     public void addPlayer(Player player) throws IOException {

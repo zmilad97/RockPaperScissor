@@ -5,17 +5,16 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.Socket;
-import java.util.HashMap;
 import java.util.Map;
 
 public class Player {
-    private String id;
-    private String name;
+    private final String id;
+    private final String name;
     private Socket socket;
     private DataOutputStream dos;
     private BufferedReader br;
-    private Map<String, Integer> cardsCount = new HashMap<>();
-    private int lives = 3;
+    private Map<String, Integer> cardsCount;
+    private int lives;
 
     public Player(PlayerDTO playerDTO) {
         this.id = playerDTO.getId();
@@ -23,9 +22,7 @@ public class Player {
         this.cardsCount = playerDTO.getCardsCount();
         this.lives = playerDTO.getLives();
     }
-    public Player(){
 
-    }
 
     public void cardsMinus(String card) {
         cardsCount.put(card, cardsCount.get(card) - 1);
@@ -35,9 +32,6 @@ public class Player {
         return id;
     }
 
-    public void setId(String id) {
-        this.id = id;
-    }
 
     public Socket getSocket() {
         return socket;
@@ -65,24 +59,12 @@ public class Player {
         return dos;
     }
 
-    public void setDos(DataOutputStream dos) {
-        this.dos = dos;
-    }
-
     public BufferedReader getBr() {
         return br;
     }
 
-    public void setBr(BufferedReader br) {
-        this.br = br;
-    }
-
     public String getName() {
         return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
     }
 
     public int getLives() {
