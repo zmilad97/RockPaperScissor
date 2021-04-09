@@ -50,7 +50,7 @@ public class UserService extends Thread {
 //        }
     }
 
-    private void createRoom() throws IOException {
+   /* private void createRoom() throws IOException {
         int str;
         boolean isPublic = true;
         int players = 2;
@@ -61,10 +61,7 @@ public class UserService extends Thread {
             dos.writeChars("\n1 - public \nOR\n2 - private\n");
             if (br.readLine().equals("2"))
                 isPublic = false;
-            /**
-             * for now it must be a even number
-             *  TODO: Make it to use odd numbers too
-             */
+
             dos.writeChars("how many players do you want in room ? at least 2...\n");
             str = Integer.parseInt(br.readLine());
             if (str > 2)
@@ -115,5 +112,5 @@ public class UserService extends Thread {
         GameService.roomPlayerMap.put(room, player);
     }
 
-
+*/
 }

@@ -37,7 +37,7 @@ public class RoomService {
 
     public void playerJoin(String roomId, String playerId) {
         try {
-            GameService.findRoom(roomId).addPlayer(playerService.findPlayer(playerId));
+            GameService.rooms.get(roomId).addPlayer(playerService.findPlayer(playerId));
         } catch (IOException e) {
             e.printStackTrace();
         }

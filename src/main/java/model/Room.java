@@ -23,6 +23,7 @@ public class Room {
         this.isPublic = roomDTO.isPublic();
         this.playerCount = roomDTO.getPlayerCount();
         this.cardsCount = roomDTO.getCardsCount();
+        players = new ArrayList<>();
     }
 
     public Room(boolean isPublic, int playerCount, String name) {

@@ -80,8 +80,8 @@ public class Game extends Thread {
             player1.getDos().writeBytes("\n you " + result.get(player1).toUpperCase() + " you have : " + player1.getLives() + " lives\n");
             player2.getDos().writeBytes("\n you " + result.get(player2).toUpperCase() + " you have : " + player2.getLives() + " lives\n");
 
-            GameService.findRoom(roomId).addPlayer(player1);
-            GameService.findRoom(roomId).addPlayer(player2);
+            GameService.rooms.get(roomId).addPlayer(player1);
+            GameService.rooms.get(roomId).addPlayer(player2);
 
         } catch (IOException e) {
             e.printStackTrace();
