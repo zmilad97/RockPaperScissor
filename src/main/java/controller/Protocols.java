@@ -40,8 +40,7 @@ public class Protocols {
 
     }
 
-    private static void startGame() {
-
+    private void startGame() {
     }
 
 }

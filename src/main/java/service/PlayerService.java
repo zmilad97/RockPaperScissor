@@ -1,12 +1,18 @@
 package service;
 
+import lombok.SneakyThrows;
+import lombok.extern.slf4j.Slf4j;
+import model.Game;
 import model.Player;
 import model.PlayerDTO;
 
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
 import java.net.Socket;
 import java.util.ArrayList;
 import java.util.List;
 
+@Slf4j
 public class PlayerService {
 
 
@@ -27,8 +33,11 @@ public class PlayerService {
     }
 
     //TODO : fix this method
+    @SneakyThrows
     public void setSocket(Socket socket) {
-        Player player = new Player();
+        BufferedReader br = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+        GameService.playerDTOS.size();
+        Player player = new Player(GameService.playerDTOS.get(br.readLine()));
         player.setSocket(socket);
         UserService userService = new UserService(player);
         userService.start();

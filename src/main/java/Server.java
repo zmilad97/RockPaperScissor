@@ -2,6 +2,7 @@ import com.google.gson.Gson;
 import controller.WebStarter;
 import lombok.extern.slf4j.Slf4j;
 import model.Player;
+import org.apache.log4j.net.TelnetAppender;
 import service.PlayerService;
 import service.RoomService;
 import service.UserService;
@@ -30,8 +31,8 @@ public class Server {
         roomService = new RoomService(playerService);
         webStarter = new WebStarter(gson, playerService, roomService);
 
+        log.info("Server Started : " + serverSocket.getLocalSocketAddress());
         while (!serverSocket.isClosed()) {
-            Server.log.info("Server Started : " + serverSocket.getLocalSocketAddress());
             Socket socket = serverSocket.accept();
             playerService.setSocket(socket);
         }

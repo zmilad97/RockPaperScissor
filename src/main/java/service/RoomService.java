@@ -37,7 +37,6 @@ public class RoomService {
 
     public void playerJoin(String roomId, String playerId) {
         try {
-//            playerService.findPlayer(playerId).setSocket(socket);
             GameService.findRoom(roomId).addPlayer(playerService.findPlayer(playerId));
         } catch (IOException e) {
             e.printStackTrace();
