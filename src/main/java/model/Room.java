@@ -8,11 +8,11 @@ import java.util.*;
 public class Room {
     private final String id;
     private final String name;
-    private Player admin;
+    private final Player admin;
     private final boolean isPublic;
     private final int playerCount;
-    private List<Game> games;
-    private List<Player> players;
+    private final List<Game> games;
+    private final List<Player> players;
     private final Map<String, Integer> cardsCount;
 
     public Room(RoomDTO roomDTO) {
@@ -34,7 +34,7 @@ public class Room {
             player.getDos().writeChars("\nYou Entered The Room : " + this.name + "\n" +
                     "\nYou Are Player Number " + players.size() + " Waiting For " + needPlayer + " More Players");
             if (player.getCardsCount().size() == 0)
-                player.setCardsCount(this.cardsCount.get("Rock"),this.cardsCount.get("Paper"),this.cardsCount.get("Scissor"));
+                player.setCardsCount(this.cardsCount.get("Rock"), this.cardsCount.get("Paper"), this.cardsCount.get("Scissor"));
             this.players.forEach(p -> {
                 try {
                     if (!p.equals(player))
@@ -167,25 +167,10 @@ public class Room {
     }
 
 
-    public int getPlayerCount() {
-        return playerCount;
-    }
-
     public List<Player> getPlayers() {
         return players;
     }
 
-    public void setPlayers(List<Player> players) {
-        this.players = players;
-    }
-
-    public List<Game> getGames() {
-        return games;
-    }
-
-    public void setGames(List<Game> games) {
-        this.games = games;
-    }
 
     public boolean isPublic() {
         return isPublic;
@@ -198,14 +183,6 @@ public class Room {
 
     public Player getAdmin() {
         return admin;
-    }
-
-    public void setAdmin(Player admin) {
-        this.admin = admin;
-    }
-
-    public Map<String, Integer> getCardsCount() {
-        return cardsCount;
     }
 
 }

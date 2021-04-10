@@ -1,7 +1,6 @@
 package controller;
 
 import com.google.gson.Gson;
-import model.Room;
 import model.RoomDTO;
 import service.PlayerService;
 import service.RoomService;

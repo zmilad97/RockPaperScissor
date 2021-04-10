@@ -13,8 +13,8 @@ public class RoomDTO {
     private final PlayerDTO admin;
     private final boolean isPublic;
     private final int playerCount;
-    private List<GameDTO> games;
-    private List<PlayerDTO> players;
+    private final List<GameDTO> games;
+    private final List<PlayerDTO> players;
     private final Map<String, Integer> cardsCount;
 
     public RoomDTO(String name, boolean isPublic, int playerCount, Map<String, Integer> cardsCount, String id) {
@@ -46,22 +46,6 @@ public class RoomDTO {
 
     public int getPlayerCount() {
         return playerCount;
-    }
-
-    public List<GameDTO> getGames() {
-        return games;
-    }
-
-    public void setGames(List<GameDTO> games) {
-        this.games = games;
-    }
-
-    public List<PlayerDTO> getPlayers() {
-        return players;
-    }
-
-    public void setPlayers(List<PlayerDTO> players) {
-        this.players = players;
     }
 
     public Map<String, Integer> getCardsCount() {

@@ -13,7 +13,7 @@ public class Player {
     private Socket socket;
     private DataOutputStream dos;
     private BufferedReader br;
-    private Map<String, Integer> cardsCount;
+    private final Map<String, Integer> cardsCount;
     private int lives;
 
     public Player(PlayerDTO playerDTO) {
