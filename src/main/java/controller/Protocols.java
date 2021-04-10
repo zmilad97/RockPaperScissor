@@ -25,6 +25,9 @@ public class Protocols {
                 case "JOIN" -> {
                     return joinRoom();
                 }
+                case "ADMIN" -> {
+                    return roomAdmin();
+                }
                 case "START" -> {
                     return startGame();
                 }
@@ -55,22 +58,23 @@ public class Protocols {
         return "null";
     }
 
-    private String leave() {
-        GameService.playerRoomMap.get(player).getPlayers().remove(player);
+    private String roomAdmin() {
+        if (command.length >= 2) {
+            if (GameService.rooms.get(command[1]).getAdmin().equals(player))
+                return "ADMIN"; //TODO : redirect to admin panel
+        }
         return null;
     }
 
-    @SneakyThrows
-    private String exit() {
-        GameService.playerRoomMap.get(player).getPlayers().remove(player);
-        GameService.playerRoomMap.remove(player);
-        GameService.playerDTOS.remove(player.getId());
-        GameService.players.remove(player.getId());
-        player.getSocket().close();
+    private String startGame() {
+        if (command.length >= 3) {
+            if (GameService.rooms.get(command[1]).getAdmin().getId().equals(command[3]))
+                GameService.rooms.get(command[1]).startGame();
+            return command[0];
+        }
         return null;
     }
 
-    //TODO : fix here
     private String hand() {
         if (command.length >= 2) {
             return command[1];
@@ -95,7 +99,19 @@ public class Protocols {
     }
 
     //TODO : fix here
-    private String startGame() {
+
+    private String leave() {
+        GameService.playerRoomMap.get(player).getPlayers().remove(player);
+        return null;
+    }
+
+    @SneakyThrows
+    private String exit() {
+        GameService.playerRoomMap.get(player).getPlayers().remove(player);
+        GameService.playerRoomMap.remove(player);
+        GameService.playerDTOS.remove(player.getId());
+        GameService.players.remove(player.getId());
+        player.getSocket().close();
         return null;
     }
 

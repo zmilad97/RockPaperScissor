@@ -1,5 +1,6 @@
 import com.google.gson.Gson;
 import controller.WebStarter;
+import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import service.PlayerService;
 import service.RoomService;
@@ -17,11 +18,12 @@ public class Server {
     private final WebStarter webStarter;
     private final ServerSocket serverSocket;
 
-    public static void main(String[] args) throws Exception {
+    public static void main(String[] args) {
         Server server = new Server();
     }
 
-    public Server() throws Exception {
+    @SneakyThrows
+    public Server() {
         serverSocket = new ServerSocket(port);
         gson = new Gson();
         playerService = new PlayerService();

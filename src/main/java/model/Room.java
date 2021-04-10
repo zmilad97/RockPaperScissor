@@ -44,8 +44,8 @@ public class Room {
                     e.printStackTrace();
                 }
             });
-            if (this.players.size() == playerCount)
-                startGame();
+//            if (this.players.size() == playerCount)
+//                startGame();
 
         } else {
             player.getDos().writeChars("\nThe Room Is Full");
@@ -53,7 +53,7 @@ public class Room {
     }
 
 
-    private void startGame() {
+    public void startGame() {
         boolean win = false;
         players.forEach(p -> {
             try {
@@ -98,7 +98,7 @@ public class Room {
 
             players.forEach(p -> {
                 if (p.getLives() == 0) {
-
+                    p.getCardsCount().clear();
                     try {
                         p.getDos().writeChars("\nyou lost ! you have no more lives .");
                     } catch (IOException e) {
@@ -108,7 +108,7 @@ public class Room {
                         p.getCardsCount().get("Paper") == 0 &&
                         p.getCardsCount().get("Scissor") == 0 &&
                         p.getLives() < 3) {
-
+                    p.getCardsCount().clear();
                     try {
                         p.getDos().writeChars("you lost ! you have no more cards .");
                     } catch (IOException e) {
