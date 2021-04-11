@@ -1,5 +1,7 @@
 package model;
 
+import controller.Protocols;
+import lombok.SneakyThrows;
 import service.GameService;
 
 import java.io.IOException;
@@ -14,6 +16,7 @@ public class Room {
     private final List<Game> games;
     private final List<Player> players;
     private final Map<String, Integer> cardsCount;
+    private Protocols protocols;
 
     public Room(RoomDTO roomDTO) {
         this.id = roomDTO.getId();
@@ -24,17 +27,21 @@ public class Room {
         this.cardsCount = roomDTO.getCardsCount();
         players = new ArrayList<>();
         games = new ArrayList<>();
+        protocols = new Protocols();
     }
 
 
-    public void addPlayer(Player player) throws IOException {
+    @SneakyThrows
+    public void addPlayer(Player player) {
         if (this.players.size() != playerCount) {
             this.players.add(player);
             int needPlayer = playerCount - this.players.size();
-            player.getDos().writeChars("\nYou Entered The Room : " + this.name + "\n" +
-                    "\nYou Are Player Number " + players.size() + " Waiting For " + needPlayer + " More Players");
+            protocols.parseCommand("ENTERED " + player.getId() + " " + this.name + " " + players.size() + " " + needPlayer);
+
             if (player.getCardsCount().size() == 0)
                 player.setCardsCount(this.cardsCount.get("Rock"), this.cardsCount.get("Paper"), this.cardsCount.get("Scissor"));
+
+            protocols.parseCommand("JOINED " + this.id + " " + player.getId() + " " + needPlayer);
             this.players.forEach(p -> {
                 try {
                     if (!p.equals(player))

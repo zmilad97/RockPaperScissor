@@ -16,6 +16,8 @@ public class Game extends Thread {
     private final String roomId;
     private final Player player1;
     private final Player player2;
+    private String p1Choice;
+    private String p2Choice;
     private final Map<Player, String> result = new HashMap<>();
     private final Protocols protocols;
 
@@ -31,9 +33,20 @@ public class Game extends Thread {
     public void run() {
         player1.getDos().writeChars("\n\n\n[R]ock,[P]aper,[S]cissors : ");
         player2.getDos().writeChars("\n\n\n[R]ock,[P]aper,[S]cissors : ");
-        String p1 = GameService.playerUserServiceMap.get(player1).read();
-        String p2 = GameService.playerUserServiceMap.get(player2).read();
-        checkWin(p1, p2);
+//        String p1 = GameService.playerUserServiceMap.get(player1).read();
+//        String p2 = GameService.playerUserServiceMap.get(player2).read();
+
+//        checkWin(p1, p2);
+    }
+
+    public void addChoice(String choice, Player player) {
+        if (player1.equals(player))
+            p1Choice = choice;
+        else if (player2.equals(player))
+            p2Choice = choice;
+        if (p1Choice != null && p2Choice != null)
+            checkWin(p1Choice, p2Choice);
+
     }
 
     private void checkWin(String player1Answer, String player2Answer) {
