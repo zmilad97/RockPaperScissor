@@ -17,16 +17,10 @@ public class UserService extends Thread {
         br = player.getBr();
     }
 
-    public void run() {
-//        while (player.getSocket().isConnected()) {
-            read();
-    }
-
     @SneakyThrows
-    public String read() {
-        return protocols.parseCommand(br.readLine());
+    public void run() {
+        while (player.getSocket().isConnected()) {
+            protocols.parseCommand(br.readLine());
+        }
     }
-
-
-
 }

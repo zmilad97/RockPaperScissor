@@ -31,12 +31,8 @@ public class Game extends Thread {
 
     @SneakyThrows
     public void run() {
-        player1.getDos().writeChars("\n\n\n[R]ock,[P]aper,[S]cissors : ");
-        player2.getDos().writeChars("\n\n\n[R]ock,[P]aper,[S]cissors : ");
-//        String p1 = GameService.playerUserServiceMap.get(player1).read();
-//        String p2 = GameService.playerUserServiceMap.get(player2).read();
-
-//        checkWin(p1, p2);
+        protocols.parseCommand("PLAY " + player1.getId());
+        protocols.parseCommand("PLAY " + player2.getId());
     }
 
     public void addChoice(String choice, Player player) {
@@ -100,7 +96,7 @@ public class Game extends Thread {
         GameService.playerGameMap.remove(player1);
         GameService.playerGameMap.remove(player2);
 
-
+        //TODO : use protocol
         player1.getDos().writeBytes("\n you " + result.get(player1).toUpperCase() + " you have : " + player1.getLives() + " lives\n");
         player2.getDos().writeBytes("\n you " + result.get(player2).toUpperCase() + " you have : " + player2.getLives() + " lives\n");
 

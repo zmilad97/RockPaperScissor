@@ -3,9 +3,11 @@ package controller;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import model.Player;
+import model.Room;
 import service.GameService;
 
 import java.io.IOException;
+import java.util.Map;
 
 @Slf4j
 public class Protocols {
@@ -38,6 +40,7 @@ public class Protocols {
                 case "CARDS" -> {
                     return cards();
                 }
+
                 case "LEAVE" -> leave();
 
                 case "EXIT" -> exit();
@@ -60,7 +63,6 @@ public class Protocols {
                 case "END-ROUND" -> endRound();
 
                 case "END-ROOM" -> endRoom();
-
 
             }
         }
@@ -90,13 +92,32 @@ public class Protocols {
         }
     }
 
+    @SneakyThrows
     private void play() {
+        if (command.length >= 2) {
+            Player pl = GameService.players.get(command[1]);
+            pl.getDos().writeChars("\n\nThe Game Started ! Be Ready ...\n\n You have Rock : " + pl.getCardsCount().get("Rock") +
+                    " Paper : " + pl.getCardsCount().get("Paper") + " Scissor : " + pl.getCardsCount().get("Scissor") +
+                    "\n\n[R]ock,[P]aper,[S]cissors : ");
+        }
     }
 
     private void rest() {
     }
 
     private void stat() {
+        if (command.length >= 2) {
+            Room room = GameService.rooms.get(command[1]);
+            Map<String, Integer> cards = GameService.rooms.get(command[1]).cardsCount();
+            room.getPlayers().forEach(p -> {
+                try {
+                    p.getDos().writeChars("\n\nTotal Cards : Rock = " + cards.get("Rock")
+                            + " | Paper = " + cards.get("Paper") + " | Scissor = " + cards.get("Scissor"));
+                } catch (IOException e) {
+                    log.error(e.getMessage());
+                }
+            });
+        }
     }
 
     private void endRoom() {

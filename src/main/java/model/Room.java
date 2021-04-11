@@ -16,7 +16,8 @@ public class Room {
     private final List<Game> games;
     private final List<Player> players;
     private final Map<String, Integer> cardsCount;
-    private Protocols protocols;
+    //    private Map<String, Integer> cards;
+    private final Protocols protocols;
 
     public Room(RoomDTO roomDTO) {
         this.id = roomDTO.getId();
@@ -28,6 +29,7 @@ public class Room {
         players = new ArrayList<>();
         games = new ArrayList<>();
         protocols = new Protocols();
+//        cards = new HashMap<>();
     }
 
 
@@ -42,19 +44,9 @@ public class Room {
                 player.setCardsCount(this.cardsCount.get("Rock"), this.cardsCount.get("Paper"), this.cardsCount.get("Scissor"));
 
             protocols.parseCommand("JOINED " + this.id + " " + player.getId() + " " + needPlayer);
-            this.players.forEach(p -> {
-                try {
-                    if (!p.equals(player))
-                        p.getDos().writeChars("\nPlayer Number " + this.players.size() + " Entered" +
-                                " Waiting For " + needPlayer + " More Players");
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            });
-//            if (this.players.size() == playerCount)
-//                startGame();
 
         } else {
+            //TODO : use protocol
             player.getDos().writeChars("\nThe Room Is Full");
         }
     }
@@ -62,6 +54,7 @@ public class Room {
 
     public void startGame() {
         boolean win = false;
+        //TODO : Use Protocol
         players.forEach(p -> {
             try {
                 p.getDos().writeChars("\nThe Game Started ! Be Ready ...\n");
@@ -70,16 +63,10 @@ public class Room {
             }
         });
         if (players.size() == playerCount) {
-            Map<String, Integer> cards = cardsCount();
+//            cards = cardsCount();
+            protocols.parseCommand("STAT " + this.id);
             if (players.size() > 1) {
-                players.forEach(p -> {
-                    try {
-                        p.getDos().writeChars("\n\nTotal Cards : Rock = " + cards.get("Rock")
-                                + " | Paper = " + cards.get("Paper") + " | Scissor = " + cards.get("Scissor"));
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                });
+
             } else {
                 win = true;
             }
