@@ -1,12 +1,12 @@
 # RockPaperScissor
 Rock Paper Scissor game (Limited) 
 
-It's a Rock,Paper,Scissor game but with differents rules that built using java.
+It's a Rock,Paper,Scissor game but with differents rules that built using java. read game details below .
 
 ## Getting Started
 
 ### Start Server
-build a jar file and run it using below commands. read game details below .
+build a jar file and run it using below commands. 
 
 ```
 git clone https://github.com/zmilad97/RockPaperScissor.git
