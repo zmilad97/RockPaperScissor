@@ -9,6 +9,8 @@ import service.GameService;
 import java.io.IOException;
 import java.util.Map;
 
+
+//TODO : fix Probable Concurrency Problem
 @Slf4j
 public class Protocols {
     private String[] command;
@@ -48,9 +50,11 @@ public class Protocols {
                 /**
                  * Server to client commands
                  */
-                case "ENTERED" -> entered();
+                case "ENTERED" -> entered(); //send message for player whom entered the room
 
-                case "JOINED" -> joined();
+                case "JOINED" -> joined(); //notify all players in room that a player joined the room
+
+                case "FULL" -> full();
 
                 case "REST" -> rest();
 
@@ -90,6 +94,11 @@ public class Protocols {
                 }
             });
         }
+    }
+
+    @SneakyThrows
+    private void full() {
+        GameService.players.get(command[1]).getDos().writeChars("\n\nThe Room Is Full !!! \n");
     }
 
     @SneakyThrows

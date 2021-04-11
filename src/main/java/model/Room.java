@@ -16,7 +16,6 @@ public class Room {
     private final List<Game> games;
     private final List<Player> players;
     private final Map<String, Integer> cardsCount;
-    //    private Map<String, Integer> cards;
     private final Protocols protocols;
 
     public Room(RoomDTO roomDTO) {
@@ -29,10 +28,10 @@ public class Room {
         players = new ArrayList<>();
         games = new ArrayList<>();
         protocols = new Protocols();
-//        cards = new HashMap<>();
     }
 
 
+    //TODO : fix concurrency here
     @SneakyThrows
     public void addPlayer(Player player) {
         if (this.players.size() != playerCount) {
@@ -45,74 +44,53 @@ public class Room {
 
             protocols.parseCommand("JOINED " + this.id + " " + player.getId() + " " + needPlayer);
 
-        } else {
-            //TODO : use protocol
-            player.getDos().writeChars("\nThe Room Is Full");
-        }
+        } else
+            protocols.parseCommand("FULL " + player.getId());
+
     }
 
-
+    //TODO : check the room ended or not before START
     public void startGame() {
-        boolean win = false;
-        //TODO : Use Protocol
+        protocols.parseCommand("STAT " + this.id);
+
+        /**
+         * here matched players enter the game
+         */
+        Map<Player, Player> matchedPlayers = matchingPlayers();
+        matchedPlayers.forEach((k, v) -> {
+            if (!k.equals(v)) {
+                Game game = new Game(id, k, v);
+                game.start();
+                GameService.playerGameMap.put(k, game);
+                GameService.playerGameMap.put(v, game);
+                games.add(game);
+            } else
+                protocols.parseCommand("REST " + k.getId());
+
+
+        });
+
+
         players.forEach(p -> {
-            try {
-                p.getDos().writeChars("\nThe Game Started ! Be Ready ...\n");
-            } catch (IOException e) {
-                e.printStackTrace();
+            if (p.getLives() == 0) {
+                p.getCardsCount().clear();
+                try {
+                    p.getDos().writeChars("\nyou lost ! you have no more lives .");
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            } else if (p.getCardsCount().get("Rock") == 0 &&
+                    p.getCardsCount().get("Paper") == 0 &&
+                    p.getCardsCount().get("Scissor") == 0 &&
+                    p.getLives() < 3) {
+                p.getCardsCount().clear();
+                try {
+                    p.getDos().writeChars("you lost ! you have no more cards .");
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
             }
         });
-        if (players.size() == playerCount) {
-//            cards = cardsCount();
-            protocols.parseCommand("STAT " + this.id);
-            if (players.size() > 1) {
-
-            } else {
-                win = true;
-            }
-            /**
-             * here matched players enter the game
-             */
-            Map<Player, Player> matchedPlayers = matchingPlayers();
-            matchedPlayers.forEach((k, v) -> {
-                if (!k.equals(v)) {
-                    Game game = new Game(id, k, v);
-                    game.start();
-                    GameService.playerGameMap.put(k, game);
-                    GameService.playerGameMap.put(v, game);
-                    games.add(game);
-                } else {
-                    try {
-                        System.out.println(k.getName() + " : is on the rest this round");
-                        k.getDos().writeChars("\nyou are on rest on this round");
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                }
-            });
-
-
-            players.forEach(p -> {
-                if (p.getLives() == 0) {
-                    p.getCardsCount().clear();
-                    try {
-                        p.getDos().writeChars("\nyou lost ! you have no more lives .");
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                } else if (p.getCardsCount().get("Rock") == 0 &&
-                        p.getCardsCount().get("Paper") == 0 &&
-                        p.getCardsCount().get("Scissor") == 0 &&
-                        p.getLives() < 3) {
-                    p.getCardsCount().clear();
-                    try {
-                        p.getDos().writeChars("you lost ! you have no more cards .");
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                }
-            });
-        }
     }
 
 
