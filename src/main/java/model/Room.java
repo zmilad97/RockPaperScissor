@@ -91,6 +91,8 @@ public class Room {
                 if (!k.equals(v)) {
                     Game game = new Game(id, k, v);
                     game.start();
+                    GameService.playerGameMap.put(k, game);
+                    GameService.playerGameMap.put(v, game);
                     games.add(game);
                 } else {
                     try {

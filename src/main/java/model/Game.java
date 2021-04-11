@@ -46,7 +46,6 @@ public class Game extends Thread {
             p2Choice = choice;
         if (p1Choice != null && p2Choice != null)
             checkWin(p1Choice, p2Choice);
-
     }
 
     private void checkWin(String player1Answer, String player2Answer) {
@@ -98,11 +97,14 @@ public class Game extends Thread {
             player1.setLives(player1.getLives() - 1);
             player2.setLives(player2.getLives() + 1);
         }
+        GameService.playerGameMap.remove(player1);
+        GameService.playerGameMap.remove(player2);
 
 
         player1.getDos().writeBytes("\n you " + result.get(player1).toUpperCase() + " you have : " + player1.getLives() + " lives\n");
         player2.getDos().writeBytes("\n you " + result.get(player2).toUpperCase() + " you have : " + player2.getLives() + " lives\n");
 
+        //TODO : remove these i think
         GameService.rooms.get(roomId).addPlayer(player1);
         GameService.rooms.get(roomId).addPlayer(player2);
 

@@ -27,54 +27,40 @@ public class Protocols {
                 /**
                  * Client to server commands
                  */
-                case "JOIN" -> {
-                    return joinRoom();
-                }
-                case "ADMIN" -> {
-                    return roomAdmin();
-                }
-                case "START" -> {
-                    return startGame();
-                }
-                case "HAND" -> {
-                    return hand();
-                }
+                case "JOIN" -> joinRoom();
+
+                case "ADMIN" -> roomAdmin();
+
+                case "START" -> startGame();
+
+                case "HAND" -> hand();
+
                 case "CARDS" -> {
                     return cards();
                 }
-                case "LEAVE" -> {
-                    return leave();
-                }
-                case "EXIT" -> {
-                    return exit();
-                }
+                case "LEAVE" -> leave();
+
+                case "EXIT" -> exit();
+
                 /**
                  * Server to client commands
                  */
-                case "ENTERED" -> {
-                    return entered();
-                }
-                case "JOINED" -> {
-                    return joined();
-                }
-                case "REST" -> {
-                    return rest();
-                }
-                case "STAT" -> {
-                    return stat();
-                }
-                case "PLAY" -> {
-                    return play();
-                }
-                case "END-GAME" -> {
-                    return endGame();
-                }
-                case "END-ROUND" -> {
-                    return endRound();
-                }
-                case "END-ROOM" -> {
-                    return endRoom();
-                }
+                case "ENTERED" -> entered();
+
+                case "JOINED" -> joined();
+
+                case "REST" -> rest();
+
+                case "STAT" -> stat();
+
+                case "PLAY" -> play();
+
+                case "END-GAME" -> endGame();
+
+                case "END-ROUND" -> endRound();
+
+                case "END-ROOM" -> endRoom();
+
 
             }
         }
@@ -82,15 +68,13 @@ public class Protocols {
     }
 
     @SneakyThrows
-    private String entered() {
+    private void entered() {
         if (command.length >= 4)
             GameService.players.get(command[1]).getDos().writeChars("\nYou Entered The Room : " + command[2] + "\n" +
                     "\nYou Are Player Number " + command[3] + " Waiting For " + command[4] + " More Players");
-
-        return null;
     }
 
-    private String joined() {
+    private void joined() {
         if (command.length >= 4) {
             Player jp = GameService.players.get(command[2]);
             GameService.rooms.get(command[1]).getPlayers().forEach(p -> {
@@ -104,67 +88,54 @@ public class Protocols {
                 }
             });
         }
-        return null;
     }
 
-    private String play() {
-        return null;
+    private void play() {
     }
 
-    private String rest() {
-        return null;
+    private void rest() {
     }
 
-    private String stat() {
-        return null;
+    private void stat() {
     }
 
-    private String endRoom() {
-        return null;
+    private void endRoom() {
     }
 
-    private String endRound() {
-        return null;
+    private void endRound() {
     }
 
-    private String endGame() {
-        return null;
+    private void endGame() {
     }
 
     /**
      * Client to Server methods
      */
     @SneakyThrows
-    private String joinRoom() {
+    private void joinRoom() {
         if (command.length >= 2) {
             GameService.rooms.get(command[1]).addPlayer(player);
             log.info("player : " + player.getName() + " added to room : " + GameService.rooms.get(command[1]).getName());
         }
-        return "null";
     }
 
-    private String roomAdmin() {
+    private void roomAdmin() {
         if (command.length >= 2) {
             if (GameService.rooms.get(command[1]).getAdmin().equals(player))
-                return "ADMIN"; //TODO : redirect to admin panel
+                System.out.println("ADMIN");  //TODO : redirect to admin panel
         }
-        return null;
     }
 
-    private String startGame() {
+    private void startGame() {
         if (command.length >= 3) {
             if (GameService.rooms.get(command[1]).getAdmin().getId().equals(command[3]))
                 GameService.rooms.get(command[1]).startGame();
-            return command[0];
         }
-        return null;
     }
 
-    private String hand() {
-        if (command.length >= 2) {
-            return command[1];
-        }
-        return null;
+    private void hand() {
+        if (command.length >= 2)
+            GameService.playerGameMap.get(player).addChoice(command[1], player);
     }
 
     private String cards() {
@@ -183,19 +154,17 @@ public class Protocols {
         return "";
     }
 
-    private String leave() {
+    private void leave() {
         GameService.playerRoomMap.get(player).getPlayers().remove(player);
-        return null;
     }
 
     @SneakyThrows
-    private String exit() {
+    private void exit() {
         GameService.playerRoomMap.get(player).getPlayers().remove(player);
         GameService.playerRoomMap.remove(player);
         GameService.playerDTOS.remove(player.getId());
         GameService.players.remove(player.getId());
         player.getSocket().close();
-        return null;
     }
 
 }
