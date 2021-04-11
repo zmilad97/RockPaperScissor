@@ -1,12 +1,12 @@
 # RockPaperScissor
-|Limited| Rock Paper Scissor game (developing)
+Rock Paper Scissor game (Limited) 
 
-It's a different Rock,Paper,Scissor game that built using java.
+It's a Rock,Paper,Scissor game but with differents rules that built using java.
 
 ## Getting Started
 
 ### Start Server
-build a jar file and run it using below commands
+build a jar file and run it using below commands. read game details below .
 
 ```
 git clone https://github.com/zmilad97/RockPaperScissor.git
@@ -27,7 +27,7 @@ telnet localhost 6060
 
 
 
-## model.Game Details
+## Game Details
 Players have limited cards of each rock, paper and scissor and all cards count shows before every game
 Each player has 3 lives.
 
