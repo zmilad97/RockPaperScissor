@@ -48,7 +48,7 @@ public class Protocols {
                 case "EXIT" -> exit();
 
 
-                // com.github.zmilad97.rps.Server to client commands
+                // Server to client commands
 
                 case "ENTERED" -> entered(); //send message for player whom entered the room
 
@@ -62,6 +62,10 @@ public class Protocols {
 
                 case "PLAY" -> play();
 
+                case "WIN" -> win();
+
+                case "LOST" -> lost();
+
                 case "END-GAME" -> endGame();
 
                 case "END-ROUND" -> endRound();
@@ -71,6 +75,22 @@ public class Protocols {
             }
         }
         return null;
+    }
+
+    @SneakyThrows
+    private void lost() {
+        if (command.length >= 2) {
+            Player p1 = GameService.players.get(command[1]);
+            p1.getDos().writeBytes("\n you  LOST  you have : " + p1.getLives() + " lives\n");
+        }
+    }
+
+    @SneakyThrows
+    private void win() {
+        if (command.length >= 2) {
+            Player p1 = GameService.players.get(command[1]);
+            p1.getDos().writeBytes("\n you  Won  you have : " + p1.getLives() + " lives\n");
+        }
     }
 
 

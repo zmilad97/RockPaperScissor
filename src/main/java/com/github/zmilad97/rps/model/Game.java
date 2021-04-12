@@ -96,13 +96,13 @@ public class Game extends Thread {
         GameService.playerGameMap.remove(player1);
         GameService.playerGameMap.remove(player2);
 
-        //TODO : use protocol
-        player1.getDos().writeBytes("\n you " + result.get(player1).toUpperCase() + " you have : " + player1.getLives() + " lives\n");
-        player2.getDos().writeBytes("\n you " + result.get(player2).toUpperCase() + " you have : " + player2.getLives() + " lives\n");
-
-        //TODO : remove these i think
-        GameService.rooms.get(roomId).addPlayer(player1);
-        GameService.rooms.get(roomId).addPlayer(player2);
+        if (result.get(player1).equals("won") && result.get(player2).equals("lost")) {
+            protocols.parseCommand("WIN " + player1.getId());
+            protocols.parseCommand("LOST " + player2.getId());
+        } else {
+            protocols.parseCommand("WIN " + player2.getId());
+            protocols.parseCommand("LOST " + player1.getId());
+        }
 
     }
 

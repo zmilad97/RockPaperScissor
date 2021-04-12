@@ -32,7 +32,7 @@ public class Server {
         roomService = new RoomService(playerService);
         webStarter = new WebStarter(gson, playerService, roomService);
 
-        log.info("com.github.zmilad97.rps.Server Started : " + serverSocket.getLocalSocketAddress());
+        log.info("Server Started : " + serverSocket.getLocalSocketAddress());
         while (!serverSocket.isClosed()) {
             Socket socket = serverSocket.accept();
             playerService.setSocket(socket);

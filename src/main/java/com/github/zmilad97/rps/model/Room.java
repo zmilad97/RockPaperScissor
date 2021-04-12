@@ -122,16 +122,14 @@ public class Room {
 
         while (playerList.size() > 1) {
             Player randP1 = playerList.get(random.nextInt(playerList.size()));
-            players.remove(randP1);
             playerList.remove(randP1);
             Player randP2 = playerList.get(random.nextInt(playerList.size()));
-            players.remove(randP2);
 
             playerList.remove(randP2);
             playerMap.put(randP1, randP2);
         }
         if (playerList.size() == 1)
-            playerMap.put(players.get(0), players.get(0));
+            playerMap.put(playerList.get(0), playerList.get(0));
 
         return playerMap;
     }
