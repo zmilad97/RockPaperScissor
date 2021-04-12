@@ -1,10 +1,10 @@
-package controller;
+package com.github.zmilad97.rps.controller;
 
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
-import model.Player;
-import model.Room;
-import service.GameService;
+import com.github.zmilad97.rps.model.Player;
+import com.github.zmilad97.rps.model.Room;
+import com.github.zmilad97.rps.service.GameService;
 
 import java.io.IOException;
 import java.util.Map;
@@ -28,9 +28,9 @@ public class Protocols {
         if (request != null) {
             command = request.split(" ");
             switch (command[0]) {
-                /**
-                 * Client to server commands
-                 */
+
+                // Client to server commands
+
                 case "JOIN" -> joinRoom();
 
                 case "ADMIN" -> roomAdmin();
@@ -47,9 +47,9 @@ public class Protocols {
 
                 case "EXIT" -> exit();
 
-                /**
-                 * Server to client commands
-                 */
+
+                // com.github.zmilad97.rps.Server to client commands
+
                 case "ENTERED" -> entered(); //send message for player whom entered the room
 
                 case "JOINED" -> joined(); //notify all players in room that a player joined the room
@@ -73,6 +73,7 @@ public class Protocols {
         return null;
     }
 
+
     @SneakyThrows
     private void entered() {
         if (command.length >= 4)
@@ -80,6 +81,7 @@ public class Protocols {
                     "\nYou Are Player Number " + command[3] + " Waiting For " + command[4] + " More Players");
     }
 
+    //TODO : send game information to the admin
     private void joined() {
         if (command.length >= 4) {
             Player jp = GameService.players.get(command[2]);
@@ -111,7 +113,10 @@ public class Protocols {
         }
     }
 
+    @SneakyThrows
     private void rest() {
+        if (command.length >= 2)
+            GameService.players.get(command[1]).getDos().writeChars("\n\nYou Are On The Rest This Round ! Please Wait For Other Players ");
     }
 
     private void stat() {
@@ -138,9 +143,9 @@ public class Protocols {
     private void endGame() {
     }
 
-    /**
-     * Client to Server methods
-     */
+
+    // Client to com.github.zmilad97.rps.Server methods
+
     @SneakyThrows
     private void joinRoom() {
         if (command.length >= 2) {

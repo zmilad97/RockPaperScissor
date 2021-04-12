@@ -1,8 +1,8 @@
-package model;
+package com.github.zmilad97.rps.model;
 
-import controller.Protocols;
+import com.github.zmilad97.rps.controller.Protocols;
 import lombok.SneakyThrows;
-import service.GameService;
+import com.github.zmilad97.rps.service.GameService;
 
 import java.io.IOException;
 import java.util.*;

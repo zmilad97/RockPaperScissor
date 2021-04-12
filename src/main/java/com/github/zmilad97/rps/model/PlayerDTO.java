@@ -1,4 +1,4 @@
-package model;
+package com.github.zmilad97.rps.model;
 
 import org.apache.commons.lang3.RandomStringUtils;
 

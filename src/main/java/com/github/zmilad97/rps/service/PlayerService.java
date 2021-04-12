@@ -1,9 +1,9 @@
-package service;
+package com.github.zmilad97.rps.service;
 
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
-import model.Player;
-import model.PlayerDTO;
+import com.github.zmilad97.rps.model.Player;
+import com.github.zmilad97.rps.model.PlayerDTO;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;

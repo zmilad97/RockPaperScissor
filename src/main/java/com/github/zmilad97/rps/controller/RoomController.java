@@ -1,9 +1,9 @@
-package controller;
+package com.github.zmilad97.rps.controller;
 
 import com.google.gson.Gson;
-import model.RoomDTO;
-import service.PlayerService;
-import service.RoomService;
+import com.github.zmilad97.rps.model.RoomDTO;
+import com.github.zmilad97.rps.service.PlayerService;
+import com.github.zmilad97.rps.service.RoomService;
 import spark.Request;
 import spark.Response;
 

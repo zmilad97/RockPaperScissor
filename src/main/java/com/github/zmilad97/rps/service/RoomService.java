@@ -1,12 +1,11 @@
-package service;
+package com.github.zmilad97.rps.service;
 
 
-import model.Room;
-import model.RoomDTO;
+import com.github.zmilad97.rps.model.Room;
+import com.github.zmilad97.rps.model.RoomDTO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -35,10 +34,6 @@ public class RoomService {
     }
 
     public void playerJoin(String roomId, String playerId) {
-        try {
-            GameService.rooms.get(roomId).addPlayer(playerService.findPlayer(playerId));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        GameService.rooms.get(roomId).addPlayer(playerService.findPlayer(playerId));
     }
 }

@@ -1,6 +1,6 @@
-package model;
+package com.github.zmilad97.rps.model;
 
-import controller.Protocols;
+import com.github.zmilad97.rps.controller.Protocols;
 
 import java.util.HashMap;
 import java.util.Map;

@@ -1,8 +1,8 @@
-package service;
+package com.github.zmilad97.rps.service;
 
-import controller.Protocols;
+import com.github.zmilad97.rps.controller.Protocols;
 import lombok.SneakyThrows;
-import model.Player;
+import com.github.zmilad97.rps.model.Player;
 
 import java.io.BufferedReader;
 

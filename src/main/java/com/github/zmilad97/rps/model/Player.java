@@ -1,4 +1,4 @@
-package model;
+package com.github.zmilad97.rps.model;
 
 import java.io.BufferedReader;
 import java.io.DataOutputStream;

@@ -1,9 +1,11 @@
+package com.github.zmilad97.rps;
+
 import com.google.gson.Gson;
-import controller.WebStarter;
+import com.github.zmilad97.rps.controller.WebStarter;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
-import service.PlayerService;
-import service.RoomService;
+import com.github.zmilad97.rps.service.PlayerService;
+import com.github.zmilad97.rps.service.RoomService;
 
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -30,7 +32,7 @@ public class Server {
         roomService = new RoomService(playerService);
         webStarter = new WebStarter(gson, playerService, roomService);
 
-        log.info("Server Started : " + serverSocket.getLocalSocketAddress());
+        log.info("com.github.zmilad97.rps.Server Started : " + serverSocket.getLocalSocketAddress());
         while (!serverSocket.isClosed()) {
             Socket socket = serverSocket.accept();
             playerService.setSocket(socket);

@@ -1,6 +1,6 @@
-package service;
+package com.github.zmilad97.rps.service;
 
-import model.*;
+import com.github.zmilad97.rps.model.*;
 
 import java.util.HashMap;
 import java.util.Map;

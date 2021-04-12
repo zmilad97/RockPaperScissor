@@ -1,10 +1,10 @@
-package model;
+package com.github.zmilad97.rps.model;
 
-import controller.Protocols;
+import com.github.zmilad97.rps.controller.Protocols;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.RandomStringUtils;
-import service.GameService;
+import com.github.zmilad97.rps.service.GameService;
 
 import java.util.HashMap;
 import java.util.Map;

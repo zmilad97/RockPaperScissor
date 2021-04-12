@@ -1,7 +1,7 @@
-package model;
+package com.github.zmilad97.rps.model;
 
 import org.apache.commons.lang3.RandomStringUtils;
-import service.GameService;
+import com.github.zmilad97.rps.service.GameService;
 
 import java.util.ArrayList;
 import java.util.List;
