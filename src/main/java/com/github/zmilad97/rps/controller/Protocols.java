@@ -7,10 +7,11 @@ import com.github.zmilad97.rps.model.Room;
 import com.github.zmilad97.rps.service.GameService;
 
 import java.io.IOException;
+import java.util.List;
 import java.util.Map;
 
 
-//TODO : fix Probable Concurrency Problem
+//TODO : fix Probable Concurrency Problem (seems it does not have any)
 @Slf4j
 public class Protocols {
     private String[] command;
@@ -39,6 +40,8 @@ public class Protocols {
 
                 case "HAND" -> hand();
 
+                case "REMOVE" -> remove();
+
                 case "CARDS" -> {
                     return cards();
                 }
@@ -62,19 +65,52 @@ public class Protocols {
 
                 case "PLAY" -> play();
 
-                case "WIN" -> win();
+                case "WON" -> won();
 
                 case "LOST" -> lost();
 
-                case "END-GAME" -> endGame();
+                case "END" -> end();
 
-                case "END-ROUND" -> endRound();
-
-                case "END-ROOM" -> endRoom();
 
             }
         }
         return null;
+    }
+
+    private void end() {
+        if (command.length >= 3) {
+            if (command[1].equals("ROUND")) {
+                StringBuilder losers = new StringBuilder();
+                StringBuilder winners = new StringBuilder();
+                winners.append("Winners Of This Round Are : ");
+                losers.append("Losers Of This Round Are : ");
+                Map<Player, String> statusPlayers = GameService.rooms.get(command[2]).getRoundPlayerStatus();
+                statusPlayers.forEach((k, v) -> {
+                    if (v.equals("WON"))
+                        winners.append(k.getName());
+                    else if (v.equals("LOST"))
+                        losers.append(k.getName());
+                    winners.append(" ");
+                    losers.append(" ");
+                });
+                List<Player> players = GameService.rooms.get(command[2]).getPlayers();
+                players.forEach(p -> {
+                    try {
+                        p.getDos().writeChars("\n\n" + winners.toString() + "\n\n" + losers.toString());
+                    } catch (IOException e) {
+                        log.error(e.getMessage());
+                    }
+                });
+
+
+            } else if (command[1].equals("ROOM")) {
+
+            }
+        }
+    }
+
+    //TODO : fix this method
+    private void remove() {
     }
 
     @SneakyThrows
@@ -84,13 +120,13 @@ public class Protocols {
             p1.getDos().writeBytes("\n you LOST this round . you have : " + p1.getLives() + " lives\n");
         } else if (command.length == 3 && command[1].equals("LIFE"))
             GameService.players.get(command[2]).getDos().writeChars("\nyou lost ! you have no more lives . \n you can now use LEAVE command");
-        else if(command.length == 3 && command[1].equals("CARD"))
+        else if (command.length == 3 && command[1].equals("CARD"))
             GameService.players.get(command[2]).getDos().writeChars("\nyou lost ! you have no more cards . \n you can now use LEAVE command");
 
     }
 
     @SneakyThrows
-    private void win() {
+    private void won() {
         if (command.length >= 2) {
             Player p1 = GameService.players.get(command[1]);
             p1.getDos().writeBytes("\n you  Won  you have : " + p1.getLives() + " lives\n");
@@ -100,31 +136,41 @@ public class Protocols {
 
     @SneakyThrows
     private void entered() {
-        if (command.length >= 4)
-            GameService.players.get(command[1]).getDos().writeChars("\nYou Entered The Room : " + command[2] + "\n" +
+        if (command.length >= 4) {
+            Room room = GameService.rooms.get(command[2]);
+            GameService.players.get(command[1]).getDos().writeChars("\nYou Entered The Room : " + room.getName() + " The Admin is " + room.getAdmin().getName() + "\n" +
                     "\nYou Are Player Number " + command[3] + " Waiting For " + command[4] + " More Players");
+        }
     }
 
     //TODO : send game information to the admin
+    @SneakyThrows
     private void joined() {
         if (command.length >= 4) {
             Player jp = GameService.players.get(command[2]);
-            GameService.rooms.get(command[1]).getPlayers().forEach(p -> {
-                if (!p.equals(jp)) {
+            Room room = GameService.rooms.get(command[1]);
+            room.getPlayers().forEach(p -> {
+                if (!p.equals(jp) && !p.equals(room.getAdmin())) {
                     try {
-                        p.getDos().writeChars("\nPlayer Number " + jp.getName() + " Entered" +
+                        p.getDos().writeChars("\nPlayer " + jp.getName() + " Entered" +
                                 " Waiting For " + command[3] + " More Players");
                     } catch (IOException e) {
                         log.error(e.getMessage());
                     }
                 }
             });
+            room.getAdmin().getDos().writeChars("\n\nPlayer " + jp.getName() + " With Id : " + jp.getId() + " Joined \n Waiting For " + command[3] + " More Players");
         }
     }
 
     @SneakyThrows
     private void full() {
-        GameService.players.get(command[1]).getDos().writeChars("\n\nThe Room Is Full !!! \n");
+        if (command.length == 3) {
+            Player p = GameService.players.get(command[1]);
+            p.getDos().writeChars("\n\nThe Room Is Full !!! \n");
+            if (GameService.rooms.get(command[2]).getAdmin() != null)
+                GameService.rooms.get(command[2]).getAdmin().getDos().writeChars("The Player " + p.getName() + " With Id : " + p.getId() + " Tried To Join But Room Is Full");
+        }
     }
 
     @SneakyThrows
@@ -158,17 +204,8 @@ public class Protocols {
         }
     }
 
-    private void endRoom() {
-    }
 
-    private void endRound() {
-    }
-
-    private void endGame() {
-    }
-
-
-    // Client to com.github.zmilad97.rps.Server methods
+    // Client to Server methods
 
     @SneakyThrows
     private void joinRoom() {
@@ -178,6 +215,7 @@ public class Protocols {
         }
     }
 
+    //TODO : seems unnecessary
     private void roomAdmin() {
         if (command.length >= 2) {
             if (GameService.rooms.get(command[1]).getAdmin().equals(player))

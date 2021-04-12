@@ -19,7 +19,7 @@ public class RoomService {
     }
 
     public String createRoom(RoomDTO request) {
-        RoomDTO roomDTO = new RoomDTO(request.getName(), request.isPublic(), request.getPlayerCount(), request.getCardsCount(), request.getAdmin().getId());
+        RoomDTO roomDTO = new RoomDTO(request.getName(), request.isPublic(), request.getPlayerCount(), request.getCardsCount(), request.getAdmin().getId(), request.isAutoAdmin());
         Room room = new Room(roomDTO);
         GameService.rooms.put(room.getId(), room);
         GameService.roomDTOs.put(roomDTO.getId(), roomDTO);

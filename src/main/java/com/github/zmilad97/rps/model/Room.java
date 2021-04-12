@@ -4,40 +4,48 @@ import com.github.zmilad97.rps.controller.Protocols;
 import lombok.SneakyThrows;
 import com.github.zmilad97.rps.service.GameService;
 
-import java.io.IOException;
 import java.util.*;
 
 public class Room {
+    //TODO : add a bannedPlayer List
     private final String id;
     private final String name;
     private final Player admin;
+    private final boolean autoAdmin;
     private final boolean isPublic;
     private final int playerCount;
     private final List<Game> games;
     private final List<Player> players;
     private final Map<String, Integer> cardsCount;
     private final Protocols protocols;
+    private Map<Player, String> roundPlayerStatus;
+    int roundPlayerStatusSize = 0;
 
     public Room(RoomDTO roomDTO) {
         this.id = roomDTO.getId();
         this.name = roomDTO.getName();
-        this.admin = GameService.players.get(roomDTO.getAdmin().getId());
+        if (roomDTO.getAdmin() != null)
+            this.admin = GameService.players.get(roomDTO.getAdmin().getId());
+        else this.admin = null;
         this.isPublic = roomDTO.isPublic();
         this.playerCount = roomDTO.getPlayerCount();
         this.cardsCount = roomDTO.getCardsCount();
+        this.autoAdmin = roomDTO.isAutoAdmin();
         players = new ArrayList<>();
         games = new ArrayList<>();
         protocols = new Protocols();
+        roundPlayerStatus = new HashMap<>();
     }
 
 
     //TODO : fix concurrency here [it's done i think]
+    //TODO : fix player cant join if the round started
     @SneakyThrows
     public void addPlayer(Player player) {
         if (this.players.size() != playerCount) {
             this.players.add(player);
             int needPlayer = playerCount - this.players.size();
-            protocols.parseCommand("ENTERED " + player.getId() + " " + this.name + " " + players.size() + " " + needPlayer);
+            protocols.parseCommand("ENTERED " + player.getId() + " " + this.getId() + " " + players.size() + " " + needPlayer);
 
             if (player.getCardsCount().size() == 0)
                 player.setCardsCount(this.cardsCount.get("Rock"), this.cardsCount.get("Paper"), this.cardsCount.get("Scissor"));
@@ -45,7 +53,7 @@ public class Room {
             protocols.parseCommand("JOINED " + this.id + " " + player.getId() + " " + needPlayer);
 
         } else
-            protocols.parseCommand("FULL " + player.getId());
+            protocols.parseCommand("FULL " + player.getId() + " " + this.id);
 
     }
 
@@ -66,7 +74,6 @@ public class Room {
         checkLosers();
     }
 
-
     public Map<String, Integer> cardsCount() {
         Map<String, Integer> cards = new HashMap<>();
         cards.put("Rock", 0);
@@ -82,14 +89,17 @@ public class Room {
     }
 
     public Map<Player, Player> matchingPlayers() {
+        roundPlayerStatusSize = 0;
         Random random = new Random();
         List<Player> playerList = new ArrayList<>();
         players.forEach(p -> {
             if (p.getLives() > 0 &&
                     !(p.getCardsCount().get("Rock") == 0 &&
                             p.getCardsCount().get("Paper") == 0 &&
-                            p.getCardsCount().get("Scissor") == 0))
+                            p.getCardsCount().get("Scissor") == 0)) {
                 playerList.add(p);
+                roundPlayerStatusSize++;
+            }
         });
         Map<Player, Player> playerMap = new HashMap<>();
 
@@ -101,9 +111,10 @@ public class Room {
             playerList.remove(randP2);
             playerMap.put(randP1, randP2);
         }
-        if (playerList.size() == 1)
+        if (playerList.size() == 1) {
             playerMap.put(playerList.get(0), playerList.get(0));
-
+            roundPlayerStatusSize++;
+        }
         return playerMap;
     }
 
@@ -129,11 +140,9 @@ public class Room {
         return id;
     }
 
-
     public List<Player> getPlayers() {
         return players;
     }
-
 
     public boolean isPublic() {
         return isPublic;
@@ -143,9 +152,22 @@ public class Room {
         return name;
     }
 
-
     public Player getAdmin() {
         return admin;
     }
 
+    public boolean isAutoAdmin() {
+        return autoAdmin;
+    }
+
+    public void addStatus(Player player, String status) {
+        roundPlayerStatus.put(player, status);
+        if (roundPlayerStatus.size() == roundPlayerStatusSize) {
+            protocols.parseCommand("END ROUND " + id);
+        }
+    }
+
+    public Map<Player, String> getRoundPlayerStatus() {
+        return roundPlayerStatus;
+    }
 }

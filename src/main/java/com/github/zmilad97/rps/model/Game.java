@@ -89,20 +89,32 @@ public class Game extends Thread {
         if (result.get(player1).equals("won")) {
             player1.setLives(player1.getLives() + 1);
             player2.setLives(player2.getLives() - 1);
+
+            GameService.rooms.get(roomId).addStatus(player1, "WON");
+            GameService.rooms.get(roomId).addStatus(player2, "LOST");
+
         } else if (result.get(player1).equals("lost")) {
             player1.setLives(player1.getLives() - 1);
             player2.setLives(player2.getLives() + 1);
+
+
+            GameService.rooms.get(roomId).addStatus(player2, "WON");
+            GameService.rooms.get(roomId).addStatus(player1, "LOST");
+
         }
         GameService.playerGameMap.remove(player1);
         GameService.playerGameMap.remove(player2);
 
         if (result.get(player1).equals("won") && result.get(player2).equals("lost")) {
-            protocols.parseCommand("WIN " + player1.getId());
+            protocols.parseCommand("WON " + player1.getId());
             protocols.parseCommand("LOST " + player2.getId());
+
         } else {
-            protocols.parseCommand("WIN " + player2.getId());
+            protocols.parseCommand("WON " + player2.getId());
             protocols.parseCommand("LOST " + player1.getId());
         }
+
+
     }
 
     public boolean resolveSituiation(String player1Answer, String player2Answer) {
