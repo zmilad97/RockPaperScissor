@@ -103,7 +103,6 @@ public class Game extends Thread {
             protocols.parseCommand("WIN " + player2.getId());
             protocols.parseCommand("LOST " + player1.getId());
         }
-
     }
 
     public boolean resolveSituiation(String player1Answer, String player2Answer) {

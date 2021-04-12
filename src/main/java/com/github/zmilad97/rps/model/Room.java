@@ -31,7 +31,7 @@ public class Room {
     }
 
 
-    //TODO : fix concurrency here
+    //TODO : fix concurrency here [it's done i think]
     @SneakyThrows
     public void addPlayer(Player player) {
         if (this.players.size() != playerCount) {
@@ -41,7 +41,7 @@ public class Room {
 
             if (player.getCardsCount().size() == 0)
                 player.setCardsCount(this.cardsCount.get("Rock"), this.cardsCount.get("Paper"), this.cardsCount.get("Scissor"));
-
+            player.setLives(3);
             protocols.parseCommand("JOINED " + this.id + " " + player.getId() + " " + needPlayer);
 
         } else
@@ -52,10 +52,6 @@ public class Room {
     //TODO : check the room ended or not before START
     public void startGame() {
         protocols.parseCommand("STAT " + this.id);
-
-        /**
-         * here matched players enter the game
-         */
         Map<Player, Player> matchedPlayers = matchingPlayers();
         matchedPlayers.forEach((k, v) -> {
             if (!k.equals(v)) {
@@ -66,31 +62,8 @@ public class Room {
                 games.add(game);
             } else
                 protocols.parseCommand("REST " + k.getId());
-
-
         });
-
-
-        players.forEach(p -> {
-            if (p.getLives() == 0) {
-                p.getCardsCount().clear();
-                try {
-                    p.getDos().writeChars("\nyou lost ! you have no more lives .");
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            } else if (p.getCardsCount().get("Rock") == 0 &&
-                    p.getCardsCount().get("Paper") == 0 &&
-                    p.getCardsCount().get("Scissor") == 0 &&
-                    p.getLives() < 3) {
-                p.getCardsCount().clear();
-                try {
-                    p.getDos().writeChars("you lost ! you have no more cards .");
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-        });
+        checkLosers();
     }
 
 
@@ -132,6 +105,24 @@ public class Room {
             playerMap.put(playerList.get(0), playerList.get(0));
 
         return playerMap;
+    }
+
+    public void checkLosers() {
+        players.forEach(p -> {
+            if (p.getLives() == 0) {
+                p.getCardsCount().clear();
+                protocols.parseCommand("LOST LIFE " + p.getId());
+
+            } else if (p.getCardsCount().get("Rock") == 0 &&
+                    p.getCardsCount().get("Paper") == 0 &&
+                    p.getCardsCount().get("Scissor") == 0 &&
+                    p.getLives() < 3) {
+                p.getCardsCount().clear();
+                p.setLives(0);
+                protocols.parseCommand("LOST CARD " + p.getId());
+            }
+        });
+
     }
 
     public String getId() {

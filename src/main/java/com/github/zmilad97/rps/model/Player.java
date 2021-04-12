@@ -55,7 +55,6 @@ public class Player {
         this.cardsCount.put("Rock", r);
         this.cardsCount.put("Paper", p);
         this.cardsCount.put("Scissor", s);
-
     }
 
     public DataOutputStream getDos() {

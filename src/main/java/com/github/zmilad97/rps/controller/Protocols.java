@@ -79,10 +79,14 @@ public class Protocols {
 
     @SneakyThrows
     private void lost() {
-        if (command.length >= 2) {
+        if (command.length == 2) {
             Player p1 = GameService.players.get(command[1]);
-            p1.getDos().writeBytes("\n you  LOST  you have : " + p1.getLives() + " lives\n");
-        }
+            p1.getDos().writeBytes("\n you LOST this round . you have : " + p1.getLives() + " lives\n");
+        } else if (command.length == 3 && command[1].equals("LIFE"))
+            GameService.players.get(command[2]).getDos().writeChars("\nyou lost ! you have no more lives . \n you can now use LEAVE command");
+        else if(command.length == 3 && command[1].equals("CARD"))
+            GameService.players.get(command[2]).getDos().writeChars("\nyou lost ! you have no more cards . \n you can now use LEAVE command");
+
     }
 
     @SneakyThrows
