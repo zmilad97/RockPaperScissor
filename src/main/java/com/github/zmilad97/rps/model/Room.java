@@ -46,7 +46,7 @@ public class Room {
             this.players.add(player);
             int needPlayer = playerCount - this.players.size();
             protocols.parseCommand("ENTERED " + player.getId() + " " + this.getId() + " " + players.size() + " " + needPlayer);
-
+            GameService.playerRoomMap.put(player, GameService.rooms.get(id));
             player.setCardsCount(this.cardsCount.get("Rock"), this.cardsCount.get("Paper"), this.cardsCount.get("Scissor"));
             player.setLives(3);
             protocols.parseCommand("JOINED " + this.id + " " + player.getId() + " " + needPlayer);

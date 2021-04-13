@@ -123,9 +123,9 @@ public class Protocols {
             Player p1 = GameService.players.get(command[1]);
             p1.getDos().writeBytes("\n you LOST this round . you have : " + p1.getLives() + " lives\n");
         } else if (command.length == 3 && command[1].equals("LIFE"))
-            GameService.players.get(command[2]).getDos().writeChars("\nyou lost ! you have no more lives . \n you can now use LEAVE command");
+            GameService.players.get(command[2]).getDos().writeChars("\nyou lost ! you have no more lives . \n you can now use LEAVE command\n");
         else if (command.length == 3 && command[1].equals("CARD"))
-            GameService.players.get(command[2]).getDos().writeChars("\nyou lost ! you have no more cards . \n you can now use LEAVE command");
+            GameService.players.get(command[2]).getDos().writeChars("\nyou lost ! you have no more cards . \n you can now use LEAVE command\n");
 
     }
 
@@ -157,7 +157,7 @@ public class Protocols {
                 if (!p.equals(jp) && !p.equals(room.getAdmin())) {
                     try {
                         p.getDos().writeChars("\nPlayer " + jp.getName() + " Entered" +
-                                " Waiting For " + command[3] + " More Players");
+                                " Waiting For " + command[3] + " More Players\n");
                     } catch (IOException e) {
                         log.error(e.getMessage());
                     }
@@ -229,6 +229,7 @@ public class Protocols {
     private void hand() {
         if (command.length >= 2)
             GameService.playerGameMap.get(player).addChoice(command[1], player);
+
     }
 
     private String cards() {
@@ -247,8 +248,13 @@ public class Protocols {
         return "";
     }
 
+    @SneakyThrows
     private void leave() {
-        GameService.playerRoomMap.get(player).getPlayers().remove(player);
+        Room room = GameService.playerRoomMap.get(player);
+        room.getPlayers().remove(player);
+        player.getDos().writeChars("\nYou left the room\n");
+        room.getAdmin().getDos().writeChars("\nPlayer " + player.getName() + " With Id : " + player.getId() + " Left The Room\n\n");
+
     }
 
     @SneakyThrows
