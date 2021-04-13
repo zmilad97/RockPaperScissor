@@ -8,7 +8,6 @@ import com.github.zmilad97.rps.service.GameService;
 
 import java.io.IOException;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
 
 
@@ -80,7 +79,7 @@ public class Protocols {
     @SneakyThrows
     private void end() {
         if (command.length >= 3) {
-            if (command[1].toUpperCase().equals("ROUND")) {
+            if (command[1].equalsIgnoreCase("ROUND")) {
                 StringBuilder losers = new StringBuilder();
                 StringBuilder winners = new StringBuilder();
                 winners.append("Winners Of This Round Are : ");
@@ -106,7 +105,7 @@ public class Protocols {
                 if (!players.contains(room.getAdmin()))
                     room.getAdmin().getDos().writeChars("\n\n" + winners.toString() + "\n\n" + losers.toString());
 
-            } else if (command[1].toUpperCase().equals("ROOM")) {
+            } else if (command[1].equalsIgnoreCase("ROOM")) {
                 GameService.rooms.get(command[2]).getPlayers().forEach(p -> {
                     try {
                         p.getDos().writeChars("\nThe Room Ended ! You can join another room\n");
@@ -124,9 +123,13 @@ public class Protocols {
     @SneakyThrows
     private void help() {
         if (command.length == 1)
-            player.getDos().writeChars("\n\n Use commands without brackets " +
-                    "\n\nJOIN [room id]: joins a room | HAND [first letter of a card]: plays a card | HELP ADMIN : shows admin commands | LEAVE : leaves the room | EXIT : exits the game\n");
-        else if (command[2].toUpperCase().equals("ADMIN"))
+            player.getDos().writeChars("""
+
+                     Use commands without brackets\s
+
+                    JOIN [room id]: joins a room | HAND [first letter of a card]: plays a card | HELP ADMIN : shows admin commands | LEAVE : leaves the room | EXIT : exits the game
+                    """);
+        else if (command[2].equalsIgnoreCase("ADMIN"))
             player.getDos().writeChars("\n\n START [room id] :start next round | REMOVE [player id]: removes a player from room\n");
     }
 

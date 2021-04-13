@@ -18,7 +18,7 @@ public class Room {
     private final List<Player> players;
     private final Map<String, Integer> cardsCount;
     private final Protocols protocols;
-    private Map<Player, String> roundPlayerStatus;
+    private final Map<Player, String> roundPlayerStatus;
     int roundPlayerStatusSize = 0;
 
     public Room(RoomDTO roomDTO) {

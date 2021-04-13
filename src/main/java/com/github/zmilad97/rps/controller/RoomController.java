@@ -30,15 +30,15 @@ public class RoomController {
         return response.body();
     }
 
-    public String handleCreateRoom(Request request, Response response) {
+    public String handleCreateRoom(Request request) {
         return "room id : " + roomService.createRoom(gson.fromJson(request.body(), RoomDTO.class));
     }
 
-    public List<String> allRoom(Request request, Response response) {
+    public List<String> allRoom() {
         return roomService.allRooms();
     }
 
-    public String joinRoom(Request request, Response response) {
+    public String joinRoom(Request request) {
         roomService.playerJoin(request.params("roomId"), gson.fromJson(request.body(), HashMap.class).get("playerId").toString());
         return "you joined";
     }

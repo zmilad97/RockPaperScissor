@@ -17,9 +17,9 @@ public class WebStarter {
         path("/api", () -> {
             get("/hello", ((request, response) -> "hello World"));
             post("/login", (roomController::handleLogin));
-            post("/room/create", (roomController::handleCreateRoom));
-            get("/room/all", roomController::allRoom);
-            post("/room/join/:roomId", roomController::joinRoom);
+            post("/room/create", ((request, response) -> roomController.handleCreateRoom(request)));
+            get("/room/all", (request1, response1) -> roomController.allRoom());
+            post("/room/join/:roomId", (request, response) -> roomController.joinRoom(request));
 
         });
 

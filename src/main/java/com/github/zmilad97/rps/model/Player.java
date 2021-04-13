@@ -25,7 +25,6 @@ public class Player {
 
 
     public void cardsMinus(String card) {
-        getCardsCount();
         cardsCount.put(card, cardsCount.get(card) - 1);
     }
 
