@@ -17,10 +17,21 @@ public class UserService extends Thread {
         br = player.getBr();
     }
 
-    @SneakyThrows
     public void run() {
+        read();
+        GameService.players.remove(player.getId());
+        GameService.playerUserServiceMap.remove(player);
+    }
+
+    @SneakyThrows
+    public void read() {
+        String r;
         while (player.getSocket().isConnected()) {
-            protocols.parseCommand(br.readLine());
+            r = br.readLine();
+            if (r == null)
+                break;
+            protocols.parseCommand(r);
         }
+
     }
 }

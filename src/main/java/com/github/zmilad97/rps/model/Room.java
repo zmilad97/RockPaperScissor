@@ -38,7 +38,6 @@ public class Room {
     }
 
 
-    //TODO : fix concurrency here [it's done i think]
     //TODO : fix player cant join if the round started
     @SneakyThrows
     public void addPlayer(Player player) {

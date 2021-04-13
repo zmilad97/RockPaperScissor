@@ -106,7 +106,16 @@ public class Protocols {
                     room.getAdmin().getDos().writeChars("\n\n" + winners.toString() + "\n\n" + losers.toString());
 
             } else if (command[1].equals("ROOM")) {
-
+                GameService.rooms.get(command[2]).getPlayers().forEach(p -> {
+                    try {
+                        p.getDos().writeChars("\nThe Room Ended ! You can join another room\n");
+                    } catch (IOException e) {
+                        log.error(e.getMessage());
+                    }
+                    GameService.playerRoomMap.remove(p);
+                });
+                GameService.rooms.remove(command[2]);
+                GameService.roomDTOs.remove(command[2]);
             }
         }
     }
@@ -159,7 +168,7 @@ public class Protocols {
                         p.getDos().writeChars("\nPlayer " + jp.getName() + " Entered" +
                                 " Waiting For " + command[3] + " More Players\n");
                     } catch (IOException e) {
-                        log.error(e.getMessage());
+                        log.error("Player " + p + "ERRor " + e.getMessage());
                     }
                 }
             });
