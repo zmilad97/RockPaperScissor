@@ -4,12 +4,14 @@ import com.google.gson.Gson;
 import com.github.zmilad97.rps.model.RoomDTO;
 import com.github.zmilad97.rps.service.PlayerService;
 import com.github.zmilad97.rps.service.RoomService;
+import lombok.extern.slf4j.Slf4j;
 import spark.Request;
 import spark.Response;
 
 import java.util.HashMap;
 import java.util.List;
 
+@Slf4j
 public class RoomController {
     private final Gson gson;
     private final RoomService roomService;
@@ -29,6 +31,7 @@ public class RoomController {
     }
 
     public String handleCreateRoom(Request request, Response response) {
+        log.debug(gson.fromJson(request.body(), RoomDTO.class).getId());
         return "room id : " + roomService.createRoom(gson.fromJson(request.body(), RoomDTO.class));
     }
 

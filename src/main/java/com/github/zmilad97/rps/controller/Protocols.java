@@ -11,7 +11,6 @@ import java.util.List;
 import java.util.Map;
 
 
-//TODO : fix Probable Concurrency Problem (seems it does not have any)
 @Slf4j
 public class Protocols {
     private String[] command;
@@ -33,8 +32,6 @@ public class Protocols {
                 // Client to server commands
 
                 case "JOIN" -> joinRoom();
-
-                case "ADMIN" -> roomAdmin();
 
                 case "START" -> startGame();
 
@@ -77,6 +74,8 @@ public class Protocols {
         return null;
     }
 
+    //TODO : Handle END ROOM protocol
+    @SneakyThrows
     private void end() {
         if (command.length >= 3) {
             if (command[1].equals("ROUND")) {
@@ -84,7 +83,8 @@ public class Protocols {
                 StringBuilder winners = new StringBuilder();
                 winners.append("Winners Of This Round Are : ");
                 losers.append("Losers Of This Round Are : ");
-                Map<Player, String> statusPlayers = GameService.rooms.get(command[2]).getRoundPlayerStatus();
+                Room room = GameService.rooms.get(command[2]);
+                Map<Player, String> statusPlayers = room.getRoundPlayerStatus();
                 statusPlayers.forEach((k, v) -> {
                     if (v.equals("WON"))
                         winners.append(k.getName());
@@ -93,7 +93,7 @@ public class Protocols {
                     winners.append(" ");
                     losers.append(" ");
                 });
-                List<Player> players = GameService.rooms.get(command[2]).getPlayers();
+                List<Player> players = room.getPlayers();
                 players.forEach(p -> {
                     try {
                         p.getDos().writeChars("\n\n" + winners.toString() + "\n\n" + losers.toString());
@@ -101,16 +101,19 @@ public class Protocols {
                         log.error(e.getMessage());
                     }
                 });
-
+                if (!players.contains(room.getAdmin()))
+                    room.getAdmin().getDos().writeChars("\n\n" + winners.toString() + "\n\n" + losers.toString());
 
             } else if (command[1].equals("ROOM")) {
-
+                
             }
         }
     }
 
-    //TODO : fix this method
     private void remove() {
+        if (command.length >= 3)
+            GameService.rooms.get(command[1]).removePlayer(GameService.players.get(command[2]));
+
     }
 
     @SneakyThrows
@@ -212,14 +215,6 @@ public class Protocols {
         if (command.length >= 2) {
             GameService.rooms.get(command[1]).addPlayer(player);
             log.info("player : " + player.getName() + " added to room : " + GameService.rooms.get(command[1]).getName());
-        }
-    }
-
-    //TODO : seems unnecessary
-    private void roomAdmin() {
-        if (command.length >= 2) {
-            if (GameService.rooms.get(command[1]).getAdmin().equals(player))
-                System.out.println("ADMIN");  //TODO : redirect to admin panel
         }
     }
 

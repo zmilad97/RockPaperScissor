@@ -47,8 +47,7 @@ public class Room {
             int needPlayer = playerCount - this.players.size();
             protocols.parseCommand("ENTERED " + player.getId() + " " + this.getId() + " " + players.size() + " " + needPlayer);
 
-            if (player.getCardsCount().size() == 0)
-                player.setCardsCount(this.cardsCount.get("Rock"), this.cardsCount.get("Paper"), this.cardsCount.get("Scissor"));
+            player.setCardsCount(this.cardsCount.get("Rock"), this.cardsCount.get("Paper"), this.cardsCount.get("Scissor"));
             player.setLives(3);
             protocols.parseCommand("JOINED " + this.id + " " + player.getId() + " " + needPlayer);
 
@@ -136,6 +135,7 @@ public class Room {
 
     }
 
+
     public String getId() {
         return id;
     }
@@ -154,6 +154,10 @@ public class Room {
 
     public Player getAdmin() {
         return admin;
+    }
+
+    public void removePlayer(Player player) {
+        players.remove(player);
     }
 
     public boolean isAutoAdmin() {

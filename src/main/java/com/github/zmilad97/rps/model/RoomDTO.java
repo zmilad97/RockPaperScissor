@@ -19,15 +19,16 @@ public class RoomDTO {
     private final Map<String, Integer> cardsCount;
 
     public RoomDTO(String name, boolean isPublic, int playerCount, Map<String, Integer> cardsCount, String id, boolean autoAdmin) {
-        this.autoAdmin = autoAdmin;
         this.id = RandomStringUtils.random(5, true, true);
         this.name = name;
         this.isPublic = isPublic;
         this.playerCount = playerCount;
         this.cardsCount = cardsCount;
-        if (id != null && !id.equals(""))
-            admin = GameService.playerDTOS.get(id);
-        else admin = null;
+        this.autoAdmin = autoAdmin;
+//        if (id != null && !id.equals(""))
+        admin = GameService.playerDTOS.get(id);
+//        else admin = null;
+
         players = new ArrayList<>();
         games = new ArrayList<>();
     }
