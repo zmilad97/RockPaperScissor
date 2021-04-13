@@ -47,7 +47,7 @@ public class Game extends Thread {
     private void checkWin(String player1Answer, String player2Answer) {
 
 
-        if (!resolveSituiation(protocols.parseCommand(player1Answer), protocols.parseCommand(player2Answer))) {
+        if (!resolveSituiation(protocols.parseCommand("CARDS " + player1Answer), protocols.parseCommand("CARDS " + player2Answer))) {
             handleCards(player1Answer, player2Answer);
             if (player1Answer.equals(player2Answer)) {
                 result.put(player1, "draw");
@@ -79,9 +79,9 @@ public class Game extends Thread {
     public void handleCards(String player1Answer, String player2Answer) {
 
         if (player1Answer != null && !player1Answer.equals(""))
-            player1.cardsMinus(protocols.parseCommand("CARD" + player1Answer));
+            player1.cardsMinus(protocols.parseCommand("CARDS " + player1Answer));
         if (player2Answer != null && !player2Answer.equals(""))
-            player2.cardsMinus(protocols.parseCommand("CARD" + player2Answer));
+            player2.cardsMinus(protocols.parseCommand("CARDS " + player2Answer));
     }
 
     @SneakyThrows

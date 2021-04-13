@@ -8,6 +8,7 @@ import com.github.zmilad97.rps.service.GameService;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 
@@ -27,7 +28,7 @@ public class Protocols {
     public String parseCommand(String request) {
         if (request != null) {
             command = request.split(" ");
-            switch (command[0]) {
+            switch (command[0].toUpperCase()) {
 
                 // Client to server commands
 
@@ -105,7 +106,7 @@ public class Protocols {
                     room.getAdmin().getDos().writeChars("\n\n" + winners.toString() + "\n\n" + losers.toString());
 
             } else if (command[1].equals("ROOM")) {
-                
+
             }
         }
     }
@@ -162,7 +163,7 @@ public class Protocols {
                     }
                 }
             });
-            room.getAdmin().getDos().writeChars("\n\nPlayer " + jp.getName() + " With Id : " + jp.getId() + " Joined \nWaiting For " + command[3] + " More Players\n\n");
+            room.getAdmin().getDos().writeChars("\nPlayer " + jp.getName() + " With Id : " + jp.getId() + " Joined \nWaiting For " + command[3] + " More Players\n\n");
         }
     }
 
@@ -219,8 +220,8 @@ public class Protocols {
     }
 
     private void startGame() {
-        if (command.length >= 3) {
-            if (GameService.rooms.get(command[1]).getAdmin().getId().equals(command[3]))
+        if (command.length >= 2) {
+            if (GameService.rooms.get(command[1]).getAdmin().equals(player))
                 GameService.rooms.get(command[1]).startGame();
         }
     }
