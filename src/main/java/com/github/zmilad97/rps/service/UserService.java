@@ -25,7 +25,8 @@ public class UserService extends Thread {
         player.getSocket().close();
         GameService.players.remove(player.getId());
         GameService.playerUserServiceMap.remove(player);
-        GameService.playerRoomMap.get(player).getPlayers().remove(player);
+        if (GameService.playerRoomMap.get(player) != null)
+            GameService.playerRoomMap.get(player).getPlayers().remove(player);
     }
 
     @SneakyThrows
