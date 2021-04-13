@@ -21,6 +21,7 @@ public class UserService extends Thread {
         read();
         GameService.players.remove(player.getId());
         GameService.playerUserServiceMap.remove(player);
+        GameService.playerRoomMap.get(player).getPlayers().remove(player);
     }
 
     @SneakyThrows
