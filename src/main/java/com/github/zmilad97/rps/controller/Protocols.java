@@ -249,7 +249,8 @@ public class Protocols {
     @SneakyThrows
     private void joinRoom() {
         if (command.length >= 2)
-            GameService.rooms.get(command[1]).addPlayer(player);
+            if (GameService.rooms.get(command[1]) != null)
+                GameService.rooms.get(command[1]).addPlayer(player);
     }
 
     private void startGame() {

@@ -58,7 +58,6 @@ public class Room {
 
     }
 
-    //TODO : check the room ended or not before START
     public void startGame() {
         if (!isEnded) {
             protocols.parseCommand("STAT " + this.id);
