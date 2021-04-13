@@ -17,8 +17,12 @@ public class UserService extends Thread {
         br = player.getBr();
     }
 
+    @SneakyThrows
     public void run() {
         read();
+        player.getDos().close();
+        player.getBr().close();
+        player.getSocket().close();
         GameService.players.remove(player.getId());
         GameService.playerUserServiceMap.remove(player);
         GameService.playerRoomMap.get(player).getPlayers().remove(player);
