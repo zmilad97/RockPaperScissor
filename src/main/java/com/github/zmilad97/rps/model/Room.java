@@ -7,41 +7,44 @@ import com.github.zmilad97.rps.service.GameService;
 import java.util.*;
 
 public class Room {
-    //TODO : add a bannedPlayer List
     private final String id;
     private final String name;
     private final Player admin;
-    private final boolean autoAdmin;
-    private final boolean isPublic;
-    private final int playerCount;
+    private int playerCount;
+    private final Protocols protocols;
     private final List<Game> games;
     private final List<Player> players;
+    private final List<Player> bannedPlayers;
     private final Map<String, Integer> cardsCount;
-    private final Protocols protocols;
     private final Map<Player, String> roundPlayerStatus;
+    private final List<Player> winners;
+    private boolean isEnded = false;
+    private final boolean isPublic;
+    private final boolean autoAdmin;
     int roundPlayerStatusSize = 0;
 
     public Room(RoomDTO roomDTO) {
-        this.id = roomDTO.getId();
-        this.name = roomDTO.getName();
+        id = roomDTO.getId();
+        name = roomDTO.getName();
         if (roomDTO.getAdmin() != null)
-            this.admin = GameService.players.get(roomDTO.getAdmin().getId());
-        else this.admin = null;
-        this.isPublic = roomDTO.isPublic();
-        this.playerCount = roomDTO.getPlayerCount();
-        this.cardsCount = roomDTO.getCardsCount();
-        this.autoAdmin = roomDTO.isAutoAdmin();
+            admin = GameService.players.get(roomDTO.getAdmin().getId());
+        else admin = null;
+        isPublic = roomDTO.isPublic();
+        playerCount = roomDTO.getPlayerCount();
+        cardsCount = roomDTO.getCardsCount();
+        autoAdmin = roomDTO.isAutoAdmin();
+        winners = new ArrayList<>();
         players = new ArrayList<>();
+        bannedPlayers = new ArrayList<>();
         games = new ArrayList<>();
         protocols = new Protocols();
         roundPlayerStatus = new HashMap<>();
     }
 
 
-    //TODO : fix player cant join if the round started
     @SneakyThrows
     public void addPlayer(Player player) {
-        if (this.players.size() != playerCount) {
+        if (roundPlayerStatusSize == 0 && this.players.size() != playerCount && !bannedPlayers.contains(player)) {
             this.players.add(player);
             int needPlayer = playerCount - this.players.size();
             protocols.parseCommand("ENTERED " + player.getId() + " " + this.getId() + " " + players.size() + " " + needPlayer);
@@ -57,19 +60,21 @@ public class Room {
 
     //TODO : check the room ended or not before START
     public void startGame() {
-        protocols.parseCommand("STAT " + this.id);
-        Map<Player, Player> matchedPlayers = matchingPlayers();
-        matchedPlayers.forEach((k, v) -> {
-            if (!k.equals(v)) {
-                Game game = new Game(id, k, v);
-                game.start();
-                GameService.playerGameMap.put(k, game);
-                GameService.playerGameMap.put(v, game);
-                games.add(game);
-            } else
-                protocols.parseCommand("REST " + k.getId());
-        });
-        checkLosers();
+        if (!isEnded) {
+            protocols.parseCommand("STAT " + this.id);
+            Map<Player, Player> matchedPlayers = matchingPlayers();
+            matchedPlayers.forEach((k, v) -> {
+                if (!k.equals(v)) {
+                    Game game = new Game(id, k, v);
+                    game.start();
+                    GameService.playerGameMap.put(k, game);
+                    GameService.playerGameMap.put(v, game);
+                    games.add(game);
+                } else
+                    protocols.parseCommand("REST " + k.getId());
+            });
+            checkLosers();
+        }
     }
 
     public Map<String, Integer> cardsCount() {
@@ -167,10 +172,38 @@ public class Room {
         roundPlayerStatus.put(player, status);
         if (roundPlayerStatus.size() == roundPlayerStatusSize) {
             protocols.parseCommand("END ROUND " + id);
+            players.forEach(p -> {
+                if (p.getLives() >= 3 && p.getCardsCount().get("Rock") == 0 &&
+                        p.getCardsCount().get("Paper") == 0 &&
+                        p.getCardsCount().get("Scissor") == 0)
+                    isEnded = true;
+            });
+            if (isEnded)
+                protocols.parseCommand("END ROOM " + id);
         }
     }
 
     public Map<Player, String> getRoundPlayerStatus() {
         return roundPlayerStatus;
+    }
+
+    public void banPlayers(Player player) {
+        bannedPlayers.add(player);
+    }
+
+    public int getRoundPlayerStatusSize() {
+        return roundPlayerStatusSize;
+    }
+
+    public int getPlayerCount() {
+        return playerCount;
+    }
+
+    public void setPlayerCount(int playerCount) {
+        this.playerCount = playerCount;
+    }
+
+    public List<Player> getWinners() {
+        return winners;
     }
 }

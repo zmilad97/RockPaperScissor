@@ -106,9 +106,18 @@ public class Protocols {
                     room.getAdmin().getDos().writeChars("\n\n" + winners.toString() + "\n\n" + losers.toString());
 
             } else if (command[1].equalsIgnoreCase("ROOM")) {
+                List<Player> winners = GameService.rooms.get(command[2]).getWinners();
                 GameService.rooms.get(command[2]).getPlayers().forEach(p -> {
                     try {
-                        p.getDos().writeChars("\nThe Room Ended ! You can join another room\n");
+                        p.getDos().writeChars("\nThe Room Ended ! You can join another room\n\n   The Winners Are : ");
+
+                        winners.forEach(w -> {
+                            try {
+                                p.getDos().writeChars(w.getName() + "  |  ");
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
+                        });
                     } catch (IOException e) {
                         log.error(e.getMessage());
                     }
@@ -128,15 +137,20 @@ public class Protocols {
                      Use commands without brackets\s
 
                     JOIN [room id]: joins a room | HAND [first letter of a card]: plays a card | HELP ADMIN : shows admin commands | LEAVE : leaves the room | EXIT : exits the game
+                                                                                
                     """);
         else if (command[2].equalsIgnoreCase("ADMIN"))
-            player.getDos().writeChars("\n\n START [room id] :start next round | REMOVE [player id]: removes a player from room\n");
+            player.getDos().writeChars("\n\n START [room id] :start next round | REMOVE [room id] [player id]: removes a player from room\n | REMOVE BAN [room id] [player id] : removes and ban a player");
     }
 
     private void remove() {
-        if (command.length >= 3)
-            GameService.rooms.get(command[1]).removePlayer(GameService.players.get(command[2]));
-
+        if (command.length >= 3) {
+            if (command[1].equalsIgnoreCase("BANNED")) {
+                GameService.rooms.get(command[2]).banPlayers(GameService.players.get(command[3]));
+                GameService.rooms.get(command[2]).removePlayer(GameService.players.get(command[3]));
+            } else
+                GameService.rooms.get(command[1]).removePlayer(GameService.players.get(command[2]));
+        }
     }
 
     @SneakyThrows
@@ -169,7 +183,6 @@ public class Protocols {
         }
     }
 
-    //TODO : send game information to the admin
     @SneakyThrows
     private void joined() {
         if (command.length >= 4) {

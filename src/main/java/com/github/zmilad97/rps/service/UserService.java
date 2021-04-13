@@ -17,6 +17,7 @@ public class UserService extends Thread {
         br = player.getBr();
     }
 
+    //TODO : i think a concurrency issue happens with these codes in Room class
     @SneakyThrows
     public void run() {
         read();
@@ -25,8 +26,11 @@ public class UserService extends Thread {
         player.getSocket().close();
         GameService.players.remove(player.getId());
         GameService.playerUserServiceMap.remove(player);
-        if (GameService.playerRoomMap.get(player) != null)
+        if (GameService.playerRoomMap.get(player) != null) {
             GameService.playerRoomMap.get(player).getPlayers().remove(player);
+            if (GameService.playerRoomMap.get(player).getRoundPlayerStatusSize() != 0)
+                GameService.playerRoomMap.get(player).setPlayerCount(GameService.playerRoomMap.get(player).getPlayerCount() - 1);
+        }
     }
 
     @SneakyThrows
