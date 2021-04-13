@@ -35,10 +35,10 @@ public class PlayerService {
     @SneakyThrows
     public void setSocket(Socket socket) {
         BufferedReader br = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-        GameService.playerDTOS.size();
         Player player = new Player(GameService.playerDTOS.get(br.readLine()));
         player.setSocket(socket);
         UserService userService = new UserService(player);
+        GameService.players.put(player.getId(), player);
         GameService.playerUserServiceMap.put(player, userService);
         userService.start();
     }

@@ -31,7 +31,6 @@ public class RoomController {
     }
 
     public String handleCreateRoom(Request request, Response response) {
-        log.debug(gson.fromJson(request.body(), RoomDTO.class).getId());
         return "room id : " + roomService.createRoom(gson.fromJson(request.body(), RoomDTO.class));
     }
 

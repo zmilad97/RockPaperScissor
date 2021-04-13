@@ -162,7 +162,7 @@ public class Protocols {
                     }
                 }
             });
-            room.getAdmin().getDos().writeChars("\n\nPlayer " + jp.getName() + " With Id : " + jp.getId() + " Joined \n Waiting For " + command[3] + " More Players");
+            room.getAdmin().getDos().writeChars("\n\nPlayer " + jp.getName() + " With Id : " + jp.getId() + " Joined \nWaiting For " + command[3] + " More Players\n\n");
         }
     }
 
