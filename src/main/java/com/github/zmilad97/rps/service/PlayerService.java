@@ -6,6 +6,7 @@ import com.github.zmilad97.rps.model.Player;
 import com.github.zmilad97.rps.model.PlayerDTO;
 
 import java.io.BufferedReader;
+import java.io.DataOutputStream;
 import java.io.InputStreamReader;
 import java.net.Socket;
 import java.util.ArrayList;
@@ -35,8 +36,11 @@ public class PlayerService {
     @SneakyThrows
     public void setSocket(Socket socket) {
         BufferedReader br = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+        DataOutputStream dos = new DataOutputStream(socket.getOutputStream());
+        dos.writeChars("\n\nWelcome , Enter your id to continue : ");
         Player player = new Player(GameService.playerDTOS.get(br.readLine()));
         player.setSocket(socket);
+        dos.writeChars("\n\nHi " + player.getName() + " if you want to see commands list use HELP command\n");
         UserService userService = new UserService(player);
         GameService.players.put(player.getId(), player);
         GameService.playerUserServiceMap.put(player, userService);

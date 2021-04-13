@@ -25,12 +25,14 @@ public class Protocols {
 
     }
 
+    //
     public String parseCommand(String request) {
         if (request != null) {
             command = request.split(" ");
             switch (command[0].toUpperCase()) {
 
                 // Client to server commands
+                case "HELP" -> help();
 
                 case "JOIN" -> joinRoom();
 
@@ -75,11 +77,10 @@ public class Protocols {
         return null;
     }
 
-    //TODO : Handle END ROOM protocol
     @SneakyThrows
     private void end() {
         if (command.length >= 3) {
-            if (command[1].equals("ROUND")) {
+            if (command[1].toUpperCase().equals("ROUND")) {
                 StringBuilder losers = new StringBuilder();
                 StringBuilder winners = new StringBuilder();
                 winners.append("Winners Of This Round Are : ");
@@ -105,7 +106,7 @@ public class Protocols {
                 if (!players.contains(room.getAdmin()))
                     room.getAdmin().getDos().writeChars("\n\n" + winners.toString() + "\n\n" + losers.toString());
 
-            } else if (command[1].equals("ROOM")) {
+            } else if (command[1].toUpperCase().equals("ROOM")) {
                 GameService.rooms.get(command[2]).getPlayers().forEach(p -> {
                     try {
                         p.getDos().writeChars("\nThe Room Ended ! You can join another room\n");
@@ -118,6 +119,15 @@ public class Protocols {
                 GameService.roomDTOs.remove(command[2]);
             }
         }
+    }
+
+    @SneakyThrows
+    private void help() {
+        if (command.length == 1)
+            player.getDos().writeChars("\n\n Use commands without brackets " +
+                    "\n\nJOIN [room id]: joins a room | HAND [first letter of a card]: plays a card | HELP ADMIN : shows admin commands | LEAVE : leaves the room | EXIT : exits the game\n");
+        else if (command[2].toUpperCase().equals("ADMIN"))
+            player.getDos().writeChars("\n\n START [room id] :start next round | REMOVE [player id]: removes a player from room\n");
     }
 
     private void remove() {
@@ -168,7 +178,7 @@ public class Protocols {
                         p.getDos().writeChars("\nPlayer " + jp.getName() + " Entered" +
                                 " Waiting For " + command[3] + " More Players\n");
                     } catch (IOException e) {
-                        log.error("Player " + p + "ERRor " + e.getMessage());
+                        log.error("Player " + p + "Error " + e.getMessage());
                     }
                 }
             });
@@ -270,6 +280,8 @@ public class Protocols {
         GameService.playerRoomMap.remove(player);
         GameService.playerDTOS.remove(player.getId());
         GameService.players.remove(player.getId());
+        player.getDos().close();
+        player.getBr().close();
         player.getSocket().close();
     }
 
