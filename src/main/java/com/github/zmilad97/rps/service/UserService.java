@@ -17,10 +17,10 @@ public class UserService extends Thread {
         br = player.getBr();
     }
 
-    //TODO : i think a concurrency issue happens with these codes in Room class
     @SneakyThrows
     public void run() {
         read();
+        //TODO : i think a concurrency issue happens with these codes in Room class
         player.getDos().close();
         player.getBr().close();
         player.getSocket().close();

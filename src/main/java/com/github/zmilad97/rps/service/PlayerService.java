@@ -9,18 +9,13 @@ import java.io.BufferedReader;
 import java.io.DataOutputStream;
 import java.io.InputStreamReader;
 import java.net.Socket;
-import java.util.ArrayList;
-import java.util.List;
 
 @Slf4j
 public class PlayerService {
 
 
     public Player findPlayer(String id) {
-        List<Player> players = new ArrayList<>();
-        GameService.players.forEach((k, v) -> players.add(v));
-        return players.stream().filter(player ->
-                player.getId().equals(id)).findFirst().orElse(null);
+        return GameService.players.get(id);
     }
 
     public String createPlayer(String name) {
