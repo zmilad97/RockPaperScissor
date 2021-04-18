@@ -1,5 +1,8 @@
 package com.github.zmilad97.rps;
 
+import com.github.zmilad97.rps.model.Player;
+import com.github.zmilad97.rps.model.PlayerDTO;
+import com.github.zmilad97.rps.service.UserService;
 import com.google.gson.Gson;
 import com.github.zmilad97.rps.controller.WebStarter;
 import lombok.SneakyThrows;
@@ -34,8 +37,14 @@ public class Server {
 
         log.info("Server Started : " + serverSocket.getLocalSocketAddress());
         while (!serverSocket.isClosed()) {
+            log.debug("server socket open");
             Socket socket = serverSocket.accept();
-            playerService.setSocket(socket);
+            Player player = new Player(new PlayerDTO(""));
+            player.setSocket(socket);
+            log.debug("a socket joined");
+            UserService userService = new UserService(player);
+            userService.start();
+//            playerService.setSocket(socket);
         }
     }
 }

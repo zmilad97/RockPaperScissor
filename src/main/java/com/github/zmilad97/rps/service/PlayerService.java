@@ -27,24 +27,4 @@ public class PlayerService {
         return playerDTO.getId();
     }
 
-    @SneakyThrows
-    public void setSocket(Socket socket) {
-        BufferedReader br = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-        DataOutputStream dos = new DataOutputStream(socket.getOutputStream());
-        boolean authenticated = false;
-        while (!authenticated) {
-            dos.writeChars("\n\nWelcome , Enter your id to continue : ");
-            String id = br.readLine();
-            if (GameService.playerDTOS.get(id) != null)
-                authenticated = true;
-        }
-        Player player = new Player(GameService.playerDTOS.get(br.readLine()));
-        player.setSocket(socket);
-        dos.writeChars("\n\nHi " + player.getName() + " if you want to see commands list use HELP command\n");
-        UserService userService = new UserService(player);
-        GameService.players.put(player.getId(), player);
-        GameService.playerUserServiceMap.put(player, userService);
-        userService.start();
-    }
-
 }

@@ -5,6 +5,9 @@ import lombok.SneakyThrows;
 import com.github.zmilad97.rps.model.Player;
 
 import java.io.BufferedReader;
+import java.io.DataOutputStream;
+import java.io.InputStreamReader;
+import java.net.Socket;
 
 public class UserService extends Thread {
     private final Protocols protocols;
@@ -19,6 +22,7 @@ public class UserService extends Thread {
 
     @SneakyThrows
     public void run() {
+        setSocket();
         read();
         //TODO : i think a concurrency issue happens with these codes in Room class
         player.getDos().close();
@@ -43,5 +47,23 @@ public class UserService extends Thread {
             protocols.parseCommand(r);
         }
 
+    }
+
+
+    @SneakyThrows
+    public void setSocket() {
+        DataOutputStream dos = player.getDos();
+        boolean isAuthenticated = false;
+        String id = null;
+        while (!isAuthenticated) {
+            dos.writeChars("\n\nWelcome , Enter your id to continue : ");
+            id = br.readLine();
+            if (GameService.playerDTOS.get(id) != null)
+                isAuthenticated = true;
+        }
+        this.player.setPlayer(GameService.playerDTOS.get(id));
+        dos.writeChars("\n\nHi " + player.getName() + " if you want to see commands list use HELP command\n");
+        GameService.players.put(player.getId(), player);
+        GameService.playerUserServiceMap.put(player, this);
     }
 }

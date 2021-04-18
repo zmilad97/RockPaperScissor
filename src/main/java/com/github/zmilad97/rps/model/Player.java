@@ -8,12 +8,12 @@ import java.net.Socket;
 import java.util.Map;
 
 public class Player {
-    private final String id;
-    private final String name;
+    private String id;
+    private String name;
     private Socket socket;
     private DataOutputStream dos;
     private BufferedReader br;
-    private final Map<String, Integer> cardsCount;
+    private Map<String, Integer> cardsCount;
     private int lives;
 
     public Player(PlayerDTO playerDTO) {
@@ -75,5 +75,12 @@ public class Player {
 
     public void setLives(int lives) {
         this.lives = lives;
+    }
+
+    public void setPlayer(PlayerDTO playerDTO) {
+        this.id = playerDTO.getId();
+        this.name = playerDTO.getName();
+        this.cardsCount = playerDTO.getCardsCount();
+        this.lives = playerDTO.getLives();
     }
 }
