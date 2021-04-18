@@ -6,14 +6,23 @@ It's a Rock,Paper,Scissor game but with differents rules that built using java. 
 ## Getting Started
 
 ### Start Server
-build a jar file and run it using below commands. 
+#### build using maven :
 
 ```
 git clone https://github.com/zmilad97/RockPaperScissor.git
 cd RockPaperScissor
-./mvnw package
-java -jar target/*.jar
+mvn package
+mvn exec:java
 ```
+
+#### using docker : 
+
+```
+docker pull zmilad97/rps-game:latest
+docker run -p 6060:6060 -p 4567:4567 zmilad97/rps-game:latest
+```
+
+
 
 #### Connect Players
 players can connect to the server using " telnet " in any terminal simulator
