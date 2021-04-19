@@ -1,5 +1,7 @@
 package com.github.zmilad97.rps.controller;
 
+import com.github.zmilad97.rps.service.PlayerService;
+import com.github.zmilad97.rps.service.UserService;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import com.github.zmilad97.rps.model.Player;
@@ -15,9 +17,11 @@ import java.util.Map;
 public class Protocols {
     private String[] command;
     private Player player;
+    private UserService userService;
 
-    public Protocols(Player player) {
+    public Protocols(Player player, UserService userService) {
         this.player = player;
+        this.userService = userService;
     }
 
     public Protocols() {
@@ -32,6 +36,8 @@ public class Protocols {
 
                 // Client to server commands
                 case "HELP" -> help();
+
+                case "NAME" -> name();
 
                 case "JOIN" -> joinRoom();
 
@@ -74,6 +80,16 @@ public class Protocols {
             }
         }
         return null;
+    }
+
+    private void name() {
+        if (command[1] == null)
+            command[1] = "Unnamed";
+        PlayerService playerService = new PlayerService();
+        String id = playerService.createPlayer(command[1]);
+        Player player = new Player(GameService.playerDTOS.get(id));
+        player.setSocket(this.player.getSocket());
+        userService.setPlayer(player);
     }
 
     @SneakyThrows
@@ -139,8 +155,8 @@ public class Protocols {
                     JOIN [room id]: joins a room | HAND [first letter of a card]: plays a card | HELP ADMIN : shows admin commands | LEAVE : leaves the room | EXIT : exits the game
                                                                                 
                     """);
-        else if (command[2].equalsIgnoreCase("ADMIN"))
-            player.getDos().writeChars("\n\n START [room id] :start next round | REMOVE [room id] [player id]: removes a player from room\n | REMOVE BAN [room id] [player id] : removes and ban a player");
+        else if (command[1].equalsIgnoreCase("ADMIN"))
+            player.getDos().writeChars("\n\n START [room id] :start next round | REMOVE [room id] [player id]: removes a player from room\n | REMOVE BAN [room id] [player id] : removes and ban a player \n");
     }
 
     private void remove() {
@@ -293,13 +309,17 @@ public class Protocols {
 
     @SneakyThrows
     private void exit() {
-        GameService.playerRoomMap.get(player).getPlayers().remove(player);
-        GameService.playerRoomMap.remove(player);
-        GameService.playerDTOS.remove(player.getId());
-        GameService.players.remove(player.getId());
         player.getDos().close();
         player.getBr().close();
         player.getSocket().close();
+        if (GameService.playerRoomMap.size() != 0)
+            GameService.playerRoomMap.get(player).getPlayers().remove(player);
+        if (GameService.playerRoomMap.size() != 0)
+            GameService.playerRoomMap.remove(player);
+        if (GameService.playerDTOS.size() != 0)
+            GameService.playerDTOS.remove(player.getId());
+        if (GameService.players.size() != 0)
+            GameService.players.remove(player.getId());
     }
 
 }

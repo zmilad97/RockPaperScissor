@@ -6,25 +6,26 @@ import com.github.zmilad97.rps.model.Player;
 
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
-import java.io.InputStreamReader;
-import java.net.Socket;
 
 public class UserService extends Thread {
-    private final Protocols protocols;
-    private final Player player;
+    private Protocols protocols;
+    private Player player;
     private final BufferedReader br;
+    private DataOutputStream dos;
+
 
     public UserService(Player player) {
         this.player = player;
-        this.protocols = new Protocols(player);
+        this.protocols = new Protocols(player, this);
         br = player.getBr();
+        dos = player.getDos();
     }
 
     @SneakyThrows
     public void run() {
         setSocket();
         read();
-        //TODO : i think a concurrency issue happens with these codes in Room class
+        //TODO : i think a concurrency issue might happen with these codes in Room class
         player.getDos().close();
         player.getBr().close();
         player.getSocket().close();
@@ -52,18 +53,27 @@ public class UserService extends Thread {
 
     @SneakyThrows
     public void setSocket() {
-        DataOutputStream dos = player.getDos();
         boolean isAuthenticated = false;
         String id = null;
         while (!isAuthenticated) {
-            dos.writeChars("\n\nWelcome , Enter your id to continue : ");
+            dos.writeChars("\n\nWelcome , Enter your id to continue \n  or use \"name\" protocol and enter your name (NAME XXXX): ");
             id = br.readLine();
-            if (GameService.playerDTOS.get(id) != null)
-                isAuthenticated = true;
+            if (id != null)
+                if (id.substring(0, 4).equalsIgnoreCase("NAME")) {
+                    protocols.parseCommand(id);
+                    isAuthenticated = true;
+                } else if (GameService.playerDTOS.get(id) != null) {
+                    this.player.setPlayer(GameService.playerDTOS.get(id));
+                    isAuthenticated = true;
+                }
         }
-        this.player.setPlayer(GameService.playerDTOS.get(id));
         dos.writeChars("\n\nHi " + player.getName() + " if you want to see commands list use HELP command\n");
         GameService.players.put(player.getId(), player);
         GameService.playerUserServiceMap.put(player, this);
+    }
+
+    public void setPlayer(Player player) {
+        this.player = player;
+        this.protocols = new Protocols(this.player, this);
     }
 }
