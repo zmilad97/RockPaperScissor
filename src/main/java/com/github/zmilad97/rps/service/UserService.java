@@ -3,18 +3,21 @@ package com.github.zmilad97.rps.service;
 import com.github.zmilad97.rps.controller.Protocols;
 import lombok.SneakyThrows;
 import com.github.zmilad97.rps.model.Player;
+import lombok.extern.slf4j.Slf4j;
 
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
 
+@Slf4j
 public class UserService extends Thread {
     private Protocols protocols;
     private Player player;
     private final BufferedReader br;
-    private DataOutputStream dos;
+    private final DataOutputStream dos;
 
 
     public UserService(Player player) {
+        log.debug("User service constructor ... ");
         this.player = player;
         this.protocols = new Protocols(player, this);
         br = player.getBr();
@@ -23,29 +26,37 @@ public class UserService extends Thread {
 
     @SneakyThrows
     public void run() {
+        log.debug("run . ..  . .. . ");
         setSocket();
         read();
         //TODO : i think a concurrency issue might happen with these codes in Room class
-        player.getDos().close();
-        player.getBr().close();
-        player.getSocket().close();
-        GameService.players.remove(player.getId());
-        GameService.playerUserServiceMap.remove(player);
-        if (GameService.playerRoomMap.get(player) != null) {
-            GameService.playerRoomMap.get(player).getPlayers().remove(player);
-            if (GameService.playerRoomMap.get(player).getRoundPlayerStatusSize() != 0)
-                GameService.playerRoomMap.get(player).setPlayerCount(GameService.playerRoomMap.get(player).getPlayerCount() - 1);
+        if (player != null) {
+            player.getDos().close();
+            player.getBr().close();
+            player.getSocket().close();
+            GameService.players.remove(player.getId());
+            GameService.playerUserServiceMap.remove(player);
+            if (GameService.playerRoomMap.get(player) != null) {
+                GameService.playerRoomMap.get(player).getPlayers().remove(player);
+                if (GameService.playerRoomMap.get(player).getRoundPlayerStatusSize() != 0)
+                    GameService.playerRoomMap.get(player).setPlayerCount(GameService.playerRoomMap.get(player).getPlayerCount() - 1);
+            }
         }
     }
 
     @SneakyThrows
     public void read() {
         String r;
-        while (player.getSocket().isConnected()) {
+        while (player != null) {
             r = br.readLine();
             if (r == null)
                 break;
-            protocols.parseCommand(r);
+            String res = protocols.parseCommand(r);
+            if (res != null && res.equals("exit")) {
+                player.getSocket().close();
+                player = null;
+
+            }
         }
 
     }
@@ -54,7 +65,7 @@ public class UserService extends Thread {
     @SneakyThrows
     public void setSocket() {
         boolean isAuthenticated = false;
-        String id = null;
+        String id ;
         while (!isAuthenticated) {
             dos.writeChars("\n\nWelcome , Enter your id to continue \n  or use \"name\" protocol and enter your name (NAME XXXX): ");
             id = br.readLine();

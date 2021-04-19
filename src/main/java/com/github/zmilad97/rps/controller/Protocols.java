@@ -53,7 +53,9 @@ public class Protocols {
 
                 case "LEAVE" -> leave();
 
-                case "EXIT" -> exit();
+                case "EXIT" -> {
+                    return exit();
+                }
 
 
                 // Server to client commands
@@ -75,21 +77,19 @@ public class Protocols {
                 case "LOST" -> lost();
 
                 case "END" -> end();
-
-
             }
         }
         return null;
     }
 
     private void name() {
-        if (command[1] == null)
-            command[1] = "Unnamed";
-        PlayerService playerService = new PlayerService();
-        String id = playerService.createPlayer(command[1]);
-        Player player = new Player(GameService.playerDTOS.get(id));
-        player.setSocket(this.player.getSocket());
-        userService.setPlayer(player);
+        if (command.length != 0) {
+            PlayerService playerService = new PlayerService();
+            String id = playerService.createPlayer(command[1]);
+            Player player = new Player(GameService.playerDTOS.get(id));
+            player.setSocket(this.player.getSocket());
+            userService.setPlayer(player);
+        }
     }
 
     @SneakyThrows
@@ -308,10 +308,7 @@ public class Protocols {
     }
 
     @SneakyThrows
-    private void exit() {
-        player.getDos().close();
-        player.getBr().close();
-        player.getSocket().close();
+    private String exit() {
         if (GameService.playerRoomMap.size() != 0)
             GameService.playerRoomMap.get(player).getPlayers().remove(player);
         if (GameService.playerRoomMap.size() != 0)
@@ -320,6 +317,7 @@ public class Protocols {
             GameService.playerDTOS.remove(player.getId());
         if (GameService.players.size() != 0)
             GameService.players.remove(player.getId());
+        return "exit";
     }
 
 }
