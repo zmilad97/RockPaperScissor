@@ -127,7 +127,6 @@ public class Room {
             if (p.getLives() == 0) {
                 p.getCardsCount().clear();
                 protocols.parseCommand("LOST LIFE " + p.getId());
-
             } else if (p.getCardsCount().get("Rock") == 0 &&
                     p.getCardsCount().get("Paper") == 0 &&
                     p.getCardsCount().get("Scissor") == 0 &&
@@ -138,19 +137,14 @@ public class Room {
             }
         });
     }
-    
+
     public void addStatus(Player player, String status) {
         roundPlayerStatus.put(player, status);
-        if (roundPlayerStatus.size() == roundPlayerStatusSize) {
+        if (player.getLives() >= 3 && player.getCardsCount().get("Rock") == 0 &&
+                player.getCardsCount().get("Paper") == 0 &&
+                player.getCardsCount().get("Scissor") == 0) {
+            isEnded = true;
             protocols.parseCommand("END ROUND " + id);
-            players.forEach(p -> {
-                if (p.getLives() >= 3 && p.getCardsCount().get("Rock") == 0 &&
-                        p.getCardsCount().get("Paper") == 0 &&
-                        p.getCardsCount().get("Scissor") == 0)
-                    isEnded = true;
-            });
-            if (isEnded)
-                protocols.parseCommand("END ROOM " + id);
         }
     }
 

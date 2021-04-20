@@ -3,8 +3,6 @@ package com.github.zmilad97.rps.service;
 
 import com.github.zmilad97.rps.model.Room;
 import com.github.zmilad97.rps.model.RoomDTO;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -12,7 +10,6 @@ import java.util.List;
 
 public class RoomService {
     private final PlayerService playerService;
-    private static final Logger LOGGER = LoggerFactory.getLogger(RoomService.class);
 
     public RoomService(PlayerService playerService) {
         this.playerService = playerService;
@@ -23,7 +20,6 @@ public class RoomService {
         Room room = new Room(roomDTO);
         GameService.rooms.put(room.getId(), room);
         GameService.roomDTOs.put(roomDTO.getId(), roomDTO);
-        LOGGER.info("The room with id : " + room.getId() + " Created by player with id : " + room.getAdmin().getId());
         return room.getId();
     }
 

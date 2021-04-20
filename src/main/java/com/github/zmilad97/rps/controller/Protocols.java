@@ -120,7 +120,7 @@ public class Protocols {
                     }
                 });
                 if (!players.contains(room.getAdmin()))
-                    room.getAdmin().getDos().writeChars("\n\n" + winners.toString() + "\n\n" + losers.toString());
+                    GameService.players.get(room.getAdmin().getId()).getDos().writeChars("\n\n Winners Are : " + winners.toString() + "\n\n Losers Are" + losers.toString());
 
             } else if (command[1].equalsIgnoreCase("ROOM")) {
                 List<Player> winners = GameService.rooms.get(command[2]).getWinners();
@@ -244,7 +244,7 @@ public class Protocols {
     @SneakyThrows
     private void rest() {
         if (command.length >= 2)
-            GameService.players.get(command[1]).getDos().writeChars("\n\nYou Are On The Rest This Round ! Please Wait For Other Players ");
+            GameService.players.get(command[1]).getDos().writeChars("\n\nYou Are On The Rest This Round ! Please Wait For Other Players \n");
     }
 
     private void stat() {
