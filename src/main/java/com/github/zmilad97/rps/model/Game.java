@@ -79,29 +79,38 @@ public class Game extends Thread {
     public void handleCards(String player1Answer, String player2Answer) {
 
         if (player1Answer != null && !player1Answer.equals(""))
-            player1.cardsMinus(player1Answer);
+            player1.cardsMinus(protocols.parseCommand("CARDS " + player1Answer));
         if (player2Answer != null && !player2Answer.equals(""))
-            player2.cardsMinus(player2Answer);
+            player2.cardsMinus(protocols.parseCommand("CARDS " + player2Answer));
     }
 
     @SneakyThrows
     public void handlePlayers() {
-        if (result.get(player1).equals("won")) {
-            player1.setLives(player1.getLives() + 1);
+        if (!result.get(player1).equals("lost") && !result.get(player2).equals("lost")) {
+            if (result.get(player1).equals("won")) {
+                player1.setLives(player1.getLives() + 1);
+                player2.setLives(player2.getLives() - 1);
+
+                GameService.rooms.get(roomId).addStatus(player1, "WON");
+                GameService.rooms.get(roomId).addStatus(player2, "LOST");
+
+            } else if (result.get(player1).equals("lost")) {
+                player1.setLives(player1.getLives() - 1);
+                player2.setLives(player2.getLives() + 1);
+
+
+                GameService.rooms.get(roomId).addStatus(player2, "WON");
+                GameService.rooms.get(roomId).addStatus(player1, "LOST");
+
+            }
+        } else {
+            player1.setLives(player1.getLives() - 1);
             player2.setLives(player2.getLives() - 1);
 
-            GameService.rooms.get(roomId).addStatus(player1, "WON");
-            GameService.rooms.get(roomId).addStatus(player2, "LOST");
-
-        } else if (result.get(player1).equals("lost")) {
-            player1.setLives(player1.getLives() - 1);
-            player2.setLives(player2.getLives() + 1);
-
-
-            GameService.rooms.get(roomId).addStatus(player2, "WON");
             GameService.rooms.get(roomId).addStatus(player1, "LOST");
-
+            GameService.rooms.get(roomId).addStatus(player2, "LOST");
         }
+
         GameService.playerGameMap.remove(player1);
         GameService.playerGameMap.remove(player2);
 

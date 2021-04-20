@@ -83,13 +83,14 @@ public class Protocols {
     }
 
     private void name() {
-        if (command.length != 0) {
-            PlayerService playerService = new PlayerService();
-            String id = playerService.createPlayer(command[1]);
-            Player player = new Player(GameService.playerDTOS.get(id));
-            player.setSocket(this.player.getSocket());
-            userService.setPlayer(player);
-        }
+        if (player != null && player.getName().equals(""))
+            if (command.length != 0) {
+                PlayerService playerService = new PlayerService();
+                String id = playerService.createPlayer(command[1]);
+                Player player = new Player(GameService.playerDTOS.get(id));
+                player.setSocket(this.player.getSocket());
+                userService.setPlayer(player);
+            }
     }
 
     @SneakyThrows
@@ -273,8 +274,9 @@ public class Protocols {
 
     private void startGame() {
         if (command.length >= 2) {
-            if (GameService.rooms.get(command[1]).getAdmin().equals(player))
-                GameService.rooms.get(command[1]).startGame();
+            if (GameService.rooms.get(command[1]) != null)
+                if (GameService.rooms.get(command[1]).getAdmin().equals(player))
+                    GameService.rooms.get(command[1]).startGame();
         }
     }
 

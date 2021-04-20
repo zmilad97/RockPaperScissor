@@ -26,7 +26,8 @@ public class Player {
 
 
     public void cardsMinus(String card) {
-        cardsCount.put(card, cardsCount.get(card) - 1);
+        if (card != null && !card.equals(""))
+            cardsCount.put(card, cardsCount.get(card) - 1);
     }
 
     public String getId() {
