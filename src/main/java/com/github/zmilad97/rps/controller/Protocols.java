@@ -275,15 +275,15 @@ public class Protocols {
     private void startGame() {
         if (command.length >= 2) {
             if (GameService.rooms.get(command[1]) != null)
-                if (GameService.rooms.get(command[1]).getAdmin().equals(player))
+                if (GameService.rooms.get(command[1]).getAdmin().getId().equals(player.getId()))
                     GameService.rooms.get(command[1]).startGame();
         }
     }
 
     private void hand() {
         if (command.length >= 2)
-            GameService.playerGameMap.get(player).addChoice(command[1], player);
-
+            if (GameService.playerGameMap.get(player) != null)
+                GameService.playerGameMap.get(player).addChoice(command[1], player);
     }
 
     private String cards() {

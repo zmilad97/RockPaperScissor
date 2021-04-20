@@ -86,8 +86,9 @@ public class Game extends Thread {
 
     @SneakyThrows
     public void handlePlayers() {
-        if (!result.get(player1).equals("lost") && !result.get(player2).equals("lost")) {
+        if (!result.get(player1).equals(result.get(player2))) {
             if (result.get(player1).equals("won")) {
+
                 player1.setLives(player1.getLives() + 1);
                 player2.setLives(player2.getLives() - 1);
 
@@ -114,14 +115,24 @@ public class Game extends Thread {
         GameService.playerGameMap.remove(player1);
         GameService.playerGameMap.remove(player2);
 
-        if (result.get(player1).equals("won") && result.get(player2).equals("lost")) {
+        if (result.get(player1).equals("won"))
             protocols.parseCommand("WON " + player1.getId());
+        else
+            protocols.parseCommand("LOST " + player1.getId());
+
+        if (result.get(player2).equals("won"))
+            protocols.parseCommand("WON " + player2.getId());
+        else
             protocols.parseCommand("LOST " + player2.getId());
 
-        } else {
-            protocols.parseCommand("WON " + player2.getId());
-            protocols.parseCommand("LOST " + player1.getId());
-        }
+//        if (result.get(player1).equals("won") && result.get(player2).equals("lost")) {
+//            protocols.parseCommand("WON " + player1.getId());
+//            protocols.parseCommand("LOST " + player2.getId());
+//
+//        } else {
+//            protocols.parseCommand("WON " + player2.getId());
+//            protocols.parseCommand("LOST " + player1.getId());
+//        }
 
 
     }

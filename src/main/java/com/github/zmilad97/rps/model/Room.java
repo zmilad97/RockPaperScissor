@@ -83,9 +83,11 @@ public class Room {
         cards.put("Scissor", 0);
 
         players.forEach(p -> {
-            cards.put("Rock", cards.get("Rock") + p.getCardsCount().get("Rock"));
-            cards.put("Paper", cards.get("Paper") + p.getCardsCount().get("Paper"));
-            cards.put("Scissor", cards.get("Scissor") + p.getCardsCount().get("Scissor"));
+            if (p.getLives() > 0) {
+                cards.put("Rock", cards.get("Rock") + p.getCardsCount().get("Rock"));
+                cards.put("Paper", cards.get("Paper") + p.getCardsCount().get("Paper"));
+                cards.put("Scissor", cards.get("Scissor") + p.getCardsCount().get("Scissor"));
+            }
         });
         return cards;
     }
