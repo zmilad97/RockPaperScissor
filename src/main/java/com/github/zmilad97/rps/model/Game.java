@@ -79,9 +79,9 @@ public class Game extends Thread {
     public void handleCards(String player1Answer, String player2Answer) {
 
         if (player1Answer != null && !player1Answer.equals(""))
-            player1.cardsMinus(protocols.parseCommand("CARDS " + player1Answer));
+            player1.cardsMinus(player1Answer);
         if (player2Answer != null && !player2Answer.equals(""))
-            player2.cardsMinus(protocols.parseCommand("CARDS " + player2Answer));
+            player2.cardsMinus(player2Answer);
     }
 
     @SneakyThrows
@@ -139,12 +139,12 @@ public class Game extends Thread {
             result.put(player2, "won");
             handleCards("", player2Answer);
             situiation = true;
-        } else if (player2.getCardsCount().get(player1Answer) == 0 && player1.getCardsCount().get(player2Answer) != 0) {
+        } else if (player2.getCardsCount().get(player2Answer) == 0 && player1.getCardsCount().get(player1Answer) != 0) {
             result.put(player2, "lost");
             result.put(player1, "won");
             handleCards(player1Answer, "");
             situiation = true;
-        } else if (player2.getCardsCount().get(player1Answer) == 0 && player1.getCardsCount().get(player2Answer) == 0) {
+        } else if (player2.getCardsCount().get(player2Answer) == 0 && player1.getCardsCount().get(player1Answer) == 0) {
             result.put(player1, "lost");
             result.put(player2, "lost");
             handleCards("", "");

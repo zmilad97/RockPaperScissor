@@ -195,7 +195,7 @@ public class Protocols {
         if (command.length >= 4) {
             Room room = GameService.rooms.get(command[2]);
             GameService.players.get(command[1]).getDos().writeChars("\nYou Entered The Room : " + room.getName() + " The Admin is " + room.getAdmin().getName() + "\n" +
-                    "\nYou Are Player Number " + command[3] + " Waiting For " + command[4] + " More Players");
+                    "\nYou Are Player Number " + command[3] + " Waiting For " + command[4] + " More Players\n");
         }
     }
 
@@ -214,7 +214,8 @@ public class Protocols {
                     }
                 }
             });
-            room.getAdmin().getDos().writeChars("\nPlayer " + jp.getName() + " With Id : " + jp.getId() + " Joined \nWaiting For " + command[3] + " More Players\n\n");
+            if (room.getAdmin() != null)
+                GameService.players.get(room.getAdmin().getId()).getDos().writeChars("\nPlayer " + jp.getName() + " With Id : " + jp.getId() + " Joined \nWaiting For " + command[3] + " More Players\n\n");
         }
     }
 

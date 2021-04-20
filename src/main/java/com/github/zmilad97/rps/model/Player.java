@@ -1,8 +1,9 @@
 package com.github.zmilad97.rps.model;
 
+import lombok.SneakyThrows;
+
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
-import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.Socket;
 import java.util.Map;
@@ -37,14 +38,11 @@ public class Player {
         return socket;
     }
 
+    @SneakyThrows
     public void setSocket(Socket socket) {
         this.socket = socket;
-        try {
-            dos = new DataOutputStream(this.socket.getOutputStream());
-            br = new BufferedReader(new InputStreamReader(this.socket.getInputStream()));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        dos = new DataOutputStream(socket.getOutputStream());
+        br = new BufferedReader(new InputStreamReader(socket.getInputStream()));
     }
 
     public Map<String, Integer> getCardsCount() {

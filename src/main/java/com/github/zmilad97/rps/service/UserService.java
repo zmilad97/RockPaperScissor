@@ -17,7 +17,6 @@ public class UserService extends Thread {
 
 
     public UserService(Player player) {
-        log.debug("User service constructor ... ");
         this.player = player;
         this.protocols = new Protocols(player, this);
         br = player.getBr();
@@ -26,7 +25,6 @@ public class UserService extends Thread {
 
     @SneakyThrows
     public void run() {
-        log.debug("run . ..  . .. . ");
         setSocket();
         read();
         //TODO : i think a concurrency issue might happen with these codes in Room class
@@ -47,15 +45,15 @@ public class UserService extends Thread {
     @SneakyThrows
     public void read() {
         String r;
-        while (player != null) {
+        boolean b = true;
+        while (b) {
             r = br.readLine();
             if (r == null)
                 break;
             String res = protocols.parseCommand(r);
             if (res != null && res.equals("exit")) {
                 player.getSocket().close();
-                player = null;
-
+                b = false;
             }
         }
 
@@ -65,7 +63,7 @@ public class UserService extends Thread {
     @SneakyThrows
     public void setSocket() {
         boolean isAuthenticated = false;
-        String id ;
+        String id;
         while (!isAuthenticated) {
             dos.writeChars("\n\nWelcome , Enter your id to continue \n  or use \"name\" protocol and enter your name (NAME XXXX): ");
             id = br.readLine();

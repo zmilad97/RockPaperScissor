@@ -37,11 +37,9 @@ public class Server {
 
         log.info("Server Started : " + serverSocket.getLocalSocketAddress());
         while (!serverSocket.isClosed()) {
-            log.debug("server socket open");
             Socket socket = serverSocket.accept();
             Player player = new Player(new PlayerDTO(""));
             player.setSocket(socket);
-            log.debug("a socket joined");
             UserService userService = new UserService(player);
             userService.start();
 //            playerService.setSocket(socket);
