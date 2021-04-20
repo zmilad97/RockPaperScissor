@@ -137,9 +137,22 @@ public class Room {
                 protocols.parseCommand("LOST CARD " + p.getId());
             }
         });
-
     }
-
+    
+    public void addStatus(Player player, String status) {
+        roundPlayerStatus.put(player, status);
+        if (roundPlayerStatus.size() == roundPlayerStatusSize) {
+            protocols.parseCommand("END ROUND " + id);
+            players.forEach(p -> {
+                if (p.getLives() >= 3 && p.getCardsCount().get("Rock") == 0 &&
+                        p.getCardsCount().get("Paper") == 0 &&
+                        p.getCardsCount().get("Scissor") == 0)
+                    isEnded = true;
+            });
+            if (isEnded)
+                protocols.parseCommand("END ROOM " + id);
+        }
+    }
 
     public String getId() {
         return id;
@@ -167,21 +180,6 @@ public class Room {
 
     public boolean isAutoAdmin() {
         return autoAdmin;
-    }
-
-    public void addStatus(Player player, String status) {
-        roundPlayerStatus.put(player, status);
-        if (roundPlayerStatus.size() == roundPlayerStatusSize) {
-            protocols.parseCommand("END ROUND " + id);
-            players.forEach(p -> {
-                if (p.getLives() >= 3 && p.getCardsCount().get("Rock") == 0 &&
-                        p.getCardsCount().get("Paper") == 0 &&
-                        p.getCardsCount().get("Scissor") == 0)
-                    isEnded = true;
-            });
-            if (isEnded)
-                protocols.parseCommand("END ROOM " + id);
-        }
     }
 
     public Map<Player, String> getRoundPlayerStatus() {

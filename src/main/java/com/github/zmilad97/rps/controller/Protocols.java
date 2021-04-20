@@ -227,7 +227,7 @@ public class Protocols {
             Player p = GameService.players.get(command[1]);
             p.getDos().writeChars("\n\nThe Room Is Full !!! \n");
             if (GameService.rooms.get(command[2]).getAdmin() != null)
-                GameService.rooms.get(command[2]).getAdmin().getDos().writeChars("The Player " + p.getName() + " With Id : " + p.getId() + " Tried To Join But Room Is Full");
+                GameService.players.get(GameService.rooms.get(command[2]).getAdmin().getId()).getDos().writeChars("The Player " + p.getName() + " With Id : " + p.getId() + " Tried To Join But Room Is Full");
         }
     }
 
