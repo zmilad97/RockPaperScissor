@@ -215,7 +215,8 @@ public class Protocols {
                 }
             });
             if (room.getAdmin() != null)
-                GameService.players.get(room.getAdmin().getId()).getDos().writeChars("\nPlayer " + jp.getName() + " With Id : " + jp.getId() + " Joined \nWaiting For " + command[3] + " More Players\n\n");
+                if (GameService.players.get(room.getAdmin().getId()).getDos() != null)
+                    GameService.players.get(room.getAdmin().getId()).getDos().writeChars("\nPlayer " + jp.getName() + " With Id : " + jp.getId() + " Joined \nWaiting For " + command[3] + " More Players\n\n");
         }
     }
 
