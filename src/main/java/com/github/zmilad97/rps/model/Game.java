@@ -41,13 +41,13 @@ public class Game extends Thread {
         else if (player2.equals(player))
             p2Choice = choice;
         if (p1Choice != null && p2Choice != null)
-            checkWin(p1Choice, p2Choice);
+            checkWin(protocols.parseCommand("CARDS " + p1Choice), protocols.parseCommand("CARDS " + p2Choice));
     }
 
     private void checkWin(String player1Answer, String player2Answer) {
 
 
-        if (!resolveSituiation(protocols.parseCommand("CARDS " + player1Answer), protocols.parseCommand("CARDS " + player2Answer))) {
+        if (!resolveSituiation(player1Answer, player2Answer)) {
             handleCards(player1Answer, player2Answer);
             if (player1Answer.equals(player2Answer)) {
                 result.put(player1, "draw");
@@ -79,9 +79,9 @@ public class Game extends Thread {
     public void handleCards(String player1Answer, String player2Answer) {
 
         if (player1Answer != null && !player1Answer.equals(""))
-            player1.cardsMinus(protocols.parseCommand("CARDS " + player1Answer));
+            player1.cardsMinus(player1Answer);
         if (player2Answer != null && !player2Answer.equals(""))
-            player2.cardsMinus(protocols.parseCommand("CARDS " + player2Answer));
+            player2.cardsMinus(player2Answer);
     }
 
     @SneakyThrows
@@ -150,8 +150,8 @@ public class Game extends Thread {
             handleCards("", player2Answer);
             situiation = true;
         } else if (player2Answer.equals("")) {
-            result.put(player1, "lost");
-            result.put(player2, "won");
+            result.put(player1, "won");
+            result.put(player2, "lost");
             handleCards(player1Answer, "");
             situiation = true;
         } else if (player1.getCardsCount().get(player1Answer) == 0 && player2.getCardsCount().get(player2Answer) != 0) {

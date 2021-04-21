@@ -108,29 +108,31 @@ public class Protocols {
                         winners.append(k.getName());
                     else if (v.equals("LOST"))
                         losers.append(k.getName());
-                    winners.append(" ");
-                    losers.append(" ");
+                    winners.append("  ");
+                    losers.append("  ");
                 });
+                winners.append("\n");
+                losers.append("\n");
                 List<Player> players = room.getPlayers();
                 players.forEach(p -> {
                     try {
-                        p.getDos().writeChars("\n\n" + winners.toString() + "\n\n" + losers.toString());
+                        if (!p.getId().equals(room.getAdmin().getId()))
+                            p.getDos().writeChars("\n\n" + winners.toString() + "\n\n" + losers.toString());
                     } catch (IOException e) {
                         log.error(e.getMessage());
                     }
                 });
-                if (!players.contains(room.getAdmin()))
-                    GameService.players.get(room.getAdmin().getId()).getDos().writeChars("\n\n Winners Are : " + winners.toString() + "\n\n Losers Are" + losers.toString());
+                GameService.players.get(room.getAdmin().getId()).getDos().writeChars("\n\n" + winners.toString() + "\n\n" + losers.toString());
 
             } else if (command[1].equalsIgnoreCase("ROOM")) {
-                List<Player> winners = GameService.rooms.get(command[2]).getWinners();
+                List<Player> winners = GameService.rooms.get(command[2]).getRoomWinners();
                 GameService.rooms.get(command[2]).getPlayers().forEach(p -> {
                     try {
-                        p.getDos().writeChars("\nThe Room Ended ! You can join another room\n\n   The Winners Are : ");
+                        p.getDos().writeChars("\nThe Room Ended ! You can join another room\n\n   The Winners Are : ||  ");
 
                         winners.forEach(w -> {
                             try {
-                                p.getDos().writeChars(w.getName() + "  |  ");
+                                p.getDos().writeChars(w.getName() + "  ||  ");
                             } catch (IOException e) {
                                 e.printStackTrace();
                             }

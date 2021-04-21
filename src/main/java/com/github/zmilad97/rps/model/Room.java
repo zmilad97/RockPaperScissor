@@ -17,11 +17,12 @@ public class Room {
     private final List<Player> bannedPlayers;
     private final Map<String, Integer> cardsCount;
     private final Map<Player, String> roundPlayerStatus;
-    private final List<Player> winners;
     private boolean isEnded = false;
     private final boolean isPublic;
     private final boolean autoAdmin;
     int roundPlayerStatusSize = 0;
+    private Player restedPlayer;
+    private final List<Player> roomWinners;
 
     public Room(RoomDTO roomDTO) {
         id = roomDTO.getId();
@@ -33,12 +34,12 @@ public class Room {
         playerCount = roomDTO.getPlayerCount();
         cardsCount = roomDTO.getCardsCount();
         autoAdmin = roomDTO.isAutoAdmin();
-        winners = new ArrayList<>();
         players = new ArrayList<>();
         bannedPlayers = new ArrayList<>();
         games = new ArrayList<>();
         protocols = new Protocols();
         roundPlayerStatus = new HashMap<>();
+        roomWinners = new ArrayList<>();
     }
 
 
@@ -109,6 +110,10 @@ public class Room {
 
         while (playerList.size() > 1) {
             Player randP1 = playerList.get(random.nextInt(playerList.size()));
+            if (restedPlayer != null && playerList.contains(restedPlayer)) {
+                randP1 = restedPlayer;
+                restedPlayer = null;
+            }
             playerList.remove(randP1);
             Player randP2 = playerList.get(random.nextInt(playerList.size()));
 
@@ -117,7 +122,8 @@ public class Room {
         }
         if (playerList.size() == 1) {
             playerMap.put(playerList.get(0), playerList.get(0));
-            roundPlayerStatusSize++;
+            restedPlayer = playerList.get(0);
+            roundPlayerStatusSize--;
         }
         return playerMap;
     }
@@ -142,10 +148,18 @@ public class Room {
         roundPlayerStatus.put(player, status);
         if (player.getLives() >= 3 && player.getCardsCount().get("Rock") == 0 &&
                 player.getCardsCount().get("Paper") == 0 &&
-                player.getCardsCount().get("Scissor") == 0) {
-            isEnded = true;
+                player.getCardsCount().get("Scissor") == 0)
+            roomWinners.add(player);
+
+        if (roundPlayerStatus.size() == roundPlayerStatusSize) {
             protocols.parseCommand("END ROUND " + id);
+            if (!roomWinners.isEmpty()) {
+                isEnded = true;
+                protocols.parseCommand("END ROOM " + id);
+            }
+            roundPlayerStatus.clear();
         }
+
     }
 
     public String getId() {
@@ -196,7 +210,7 @@ public class Room {
         this.playerCount = playerCount;
     }
 
-    public List<Player> getWinners() {
-        return winners;
+    public List<Player> getRoomWinners() {
+        return roomWinners;
     }
 }
