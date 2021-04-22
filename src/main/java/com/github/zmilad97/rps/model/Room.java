@@ -12,7 +12,7 @@ public class Room {
     private final Player admin;
     private int playerCount;
     private final Protocols protocols;
-    private final List<Game> games;
+    private final List<Game> games; //seems not needed but keep it for now
     private final List<Player> players;
     private final List<Player> bannedPlayers;
     private final Map<String, Integer> cardsCount;
@@ -20,6 +20,7 @@ public class Room {
     private boolean isEnded = false;
     private final boolean isPublic;
     private final boolean autoAdmin;
+    private boolean isRoundStarted = false;
     int roundPlayerStatusSize = 0;
     private Player restedPlayer;
     private final List<Player> roomWinners;
@@ -157,7 +158,10 @@ public class Room {
                 isEnded = true;
                 protocols.parseCommand("END ROOM " + id);
             }
+            isRoundStarted = false;
             roundPlayerStatus.clear();
+            if (isAutoAdmin())
+                startGame();
         }
 
     }
@@ -213,4 +217,9 @@ public class Room {
     public List<Player> getRoomWinners() {
         return roomWinners;
     }
+
+    public boolean isRoundStarted() {
+        return isRoundStarted;
+    }
+
 }

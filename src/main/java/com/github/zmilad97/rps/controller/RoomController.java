@@ -39,7 +39,7 @@ public class RoomController {
     }
 
     public String joinRoom(Request request) {
-        roomService.playerJoin(request.params("roomId"), gson.fromJson(request.body(), HashMap.class).get("playerId").toString());
+        roomService.playerJoin(request.params("roomId"), gson.fromJson(request.body(), HashMap.class).get("admin Id").toString(), gson.fromJson(request.body(), HashMap.class).get("playerId").toString());
         return "you joined";
     }
 }

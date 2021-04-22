@@ -25,11 +25,13 @@ public class RoomService {
 
     public List<String> allRooms() {
         List<String> roomList = new ArrayList<>();
-        GameService.rooms.forEach((k, v) -> roomList.add(roomList.size() + 1 + " - Room : (" + v.getName() + ") Made by : (" + v.getAdmin().getName() + ")"));
+        if (GameService.rooms.size() != 0)
+            GameService.rooms.forEach((k, v) -> roomList.add(roomList.size() + 1 + " - Room : (" + v.getName() + ") Made by : (" + v.getAdmin().getName() + ")"));
         return roomList;
     }
 
-    public void playerJoin(String roomId, String playerId) {
-        GameService.rooms.get(roomId).addPlayer(playerService.findPlayer(playerId));
+    public void playerJoin(String roomId, String adminId, String playerId) {
+        if (GameService.rooms.get(roomId).getAdmin().getId().equals(adminId))
+            GameService.rooms.get(roomId).addPlayer(playerService.findPlayer(playerId));
     }
 }

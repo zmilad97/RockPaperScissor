@@ -124,17 +124,6 @@ public class Game extends Thread {
             protocols.parseCommand("WON " + player2.getId());
         else
             protocols.parseCommand("LOST " + player2.getId());
-
-//        if (result.get(player1).equals("won") && result.get(player2).equals("lost")) {
-//            protocols.parseCommand("WON " + player1.getId());
-//            protocols.parseCommand("LOST " + player2.getId());
-//
-//        } else {
-//            protocols.parseCommand("WON " + player2.getId());
-//            protocols.parseCommand("LOST " + player1.getId());
-//        }
-
-
     }
 
     public boolean resolveSituiation(String player1Answer, String player2Answer) {

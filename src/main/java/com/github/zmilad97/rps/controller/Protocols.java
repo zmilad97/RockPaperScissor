@@ -155,16 +155,27 @@ public class Protocols {
 
                      Use commands without brackets\s
 
-                    JOIN [room id]: joins a room | HAND [first letter of a card]: plays a card | HELP ADMIN : shows admin commands | LEAVE : leaves the room | EXIT : exits the game
+                     JOIN [room id]: joins a room 
+                     HAND [first letter of a card]: plays a card 
+                     HELP ADMIN : shows admin commands 
+                     LEAVE : leaves the room 
+                     EXIT : exits the game
                                                                                 
                     """);
         else if (command[1].equalsIgnoreCase("ADMIN"))
-            player.getDos().writeChars("\n\n START [room id] :start next round | REMOVE [room id] [player id]: removes a player from room\n | REMOVE BAN [room id] [player id] : removes and ban a player \n");
+            player.getDos().writeChars("""
+
+
+                       START [room id] :start next round 
+                       REMOVE [room id] [player id]: removes a player from room
+                       REMOVE BAN [room id] [player id] : removes and ban a player\s
+                       
+                    """);
     }
 
     private void remove() {
         if (command.length >= 3) {
-            if (command[1].equalsIgnoreCase("BANNED")) {
+            if (command[1].equalsIgnoreCase("BAN")) {
                 GameService.rooms.get(command[2]).banPlayers(GameService.players.get(command[3]));
                 GameService.rooms.get(command[2]).removePlayer(GameService.players.get(command[3]));
             } else
@@ -237,8 +248,8 @@ public class Protocols {
     private void play() {
         if (command.length >= 2) {
             Player pl = GameService.players.get(command[1]);
-            pl.getDos().writeChars("\n\nThe Game Started ! Be Ready ...\n\n You have Rock : " + pl.getCardsCount().get("Rock") +
-                    " Paper : " + pl.getCardsCount().get("Paper") + " Scissor : " + pl.getCardsCount().get("Scissor") +
+            pl.getDos().writeChars("\n\nThe Game Started ! Be Ready ...\n\n You have | Rock : " + pl.getCardsCount().get("Rock") +
+                    " | Paper : " + pl.getCardsCount().get("Paper") + " | Scissor : " + pl.getCardsCount().get("Scissor")+" | " +
                     "\n\n[R]ock,[P]aper,[S]cissors : ");
         }
     }
@@ -255,8 +266,8 @@ public class Protocols {
             Map<String, Integer> cards = GameService.rooms.get(command[1]).cardsCount();
             room.getPlayers().forEach(p -> {
                 try {
-                    p.getDos().writeChars("\n\nTotal Cards : Rock = " + cards.get("Rock")
-                            + " | Paper = " + cards.get("Paper") + " | Scissor = " + cards.get("Scissor"));
+                    p.getDos().writeChars("\n\nTotal Cards : | Rock = " + cards.get("Rock")
+                            + " | Paper = " + cards.get("Paper") + " | Scissor = " + cards.get("Scissor") + " | \n");
                 } catch (IOException e) {
                     log.error(e.getMessage());
                 }
@@ -277,7 +288,7 @@ public class Protocols {
     private void startGame() {
         if (command.length >= 2) {
             if (GameService.rooms.get(command[1]) != null)
-                if (GameService.rooms.get(command[1]).getAdmin().getId().equals(player.getId()))
+                if (!GameService.rooms.get(command[1]).isRoundStarted() && GameService.rooms.get(command[1]).getAdmin().getId().equals(player.getId()))
                     GameService.rooms.get(command[1]).startGame();
         }
     }
@@ -309,8 +320,8 @@ public class Protocols {
         Room room = GameService.playerRoomMap.get(player);
         room.getPlayers().remove(player);
         player.getDos().writeChars("\nYou left the room\n");
-        room.getAdmin().getDos().writeChars("\nPlayer " + player.getName() + " With Id : " + player.getId() + " Left The Room\n\n");
-
+        if (room.getAdmin() != null)
+            room.getAdmin().getDos().writeChars("\nPlayer " + player.getName() + " With Id : " + player.getId() + " Left The Room\n\n");
     }
 
     @SneakyThrows
