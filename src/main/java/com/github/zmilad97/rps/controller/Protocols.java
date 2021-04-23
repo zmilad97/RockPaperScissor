@@ -28,7 +28,7 @@ public class Protocols {
 
     }
 
-    //
+
     public String parseCommand(String request) {
         if (request != null) {
             command = request.split(" ");
@@ -249,7 +249,7 @@ public class Protocols {
         if (command.length >= 2) {
             Player pl = GameService.players.get(command[1]);
             pl.getDos().writeChars("\n\nThe Game Started ! Be Ready ...\n\n You have | Rock : " + pl.getCardsCount().get("Rock") +
-                    " | Paper : " + pl.getCardsCount().get("Paper") + " | Scissor : " + pl.getCardsCount().get("Scissor")+" | " +
+                    " | Paper : " + pl.getCardsCount().get("Paper") + " | Scissor : " + pl.getCardsCount().get("Scissor") + " | " +
                     "\n\n[R]ock,[P]aper,[S]cissors : ");
         }
     }
@@ -321,7 +321,8 @@ public class Protocols {
         room.getPlayers().remove(player);
         player.getDos().writeChars("\nYou left the room\n");
         if (room.getAdmin() != null)
-            room.getAdmin().getDos().writeChars("\nPlayer " + player.getName() + " With Id : " + player.getId() + " Left The Room\n\n");
+            if (room.getAdmin().getDos() != null)
+                room.getAdmin().getDos().writeChars("\nPlayer " + player.getName() + " With Id : " + player.getId() + " Left The Room\n\n");
     }
 
     @SneakyThrows

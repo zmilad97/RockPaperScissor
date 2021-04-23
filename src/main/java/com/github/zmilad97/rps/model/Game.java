@@ -52,22 +52,22 @@ public class Game extends Thread {
             if (player1Answer.equals(player2Answer)) {
                 result.put(player1, "draw");
                 result.put(player2, "draw");
-            } else if (player1Answer.equals("s") && player2Answer.equals("p")) {
+            } else if (player1Answer.equals("Scissor") && player2Answer.equals("Paper")) {
                 result.put(player1, "won");
                 result.put(player2, "lost");
-            } else if (player1Answer.equals("p") && player2Answer.equals("s")) {
+            } else if (player1Answer.equals("Paper") && player2Answer.equals("Scissor")) {
                 result.put(player1, "lost");
                 result.put(player2, "won");
-            } else if (player1Answer.equals("r") && player2Answer.equals("p")) {
+            } else if (player1Answer.equals("Rock") && player2Answer.equals("Paper")) {
                 result.put(player1, "lost");
                 result.put(player2, "won");
-            } else if (player1Answer.equals("p") && player2Answer.equals("r")) {
+            } else if (player1Answer.equals("Paper") && player2Answer.equals("Rock")) {
                 result.put(player1, "won");
                 result.put(player2, "lost");
-            } else if (player1Answer.equals("s") && player2Answer.equals("r")) {
+            } else if (player1Answer.equals("Scissor") && player2Answer.equals("Rock")) {
                 result.put(player1, "lost");
                 result.put(player2, "won");
-            } else if (player1Answer.equals("r") && player2Answer.equals("s")) {
+            } else if (player1Answer.equals("Rock") && player2Answer.equals("Scissor")) {
                 result.put(player1, "won");
                 result.put(player2, "lost");
             }
