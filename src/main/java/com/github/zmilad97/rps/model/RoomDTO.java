@@ -28,7 +28,6 @@ public class RoomDTO {
 //        if (id != null && !id.equals(""))
         admin = GameService.playerDTOS.get(id);
 //        else admin = null;
-
         players = new ArrayList<>();
         games = new ArrayList<>();
     }

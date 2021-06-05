@@ -137,6 +137,8 @@ public class Protocols {
                                 e.printStackTrace();
                             }
                         });
+                        p.getDos().writeChars(" \n");
+
                     } catch (IOException e) {
                         log.error(e.getMessage());
                     }
@@ -175,7 +177,7 @@ public class Protocols {
 
     private void remove() {
         if (command.length >= 3) {
-            if (command[1].equalsIgnoreCase("BAN")) {
+            if (command[1].toUpperCase().equals("BAN")) {
                 GameService.rooms.get(command[2]).banPlayers(GameService.players.get(command[3]));
                 GameService.rooms.get(command[2]).removePlayer(GameService.players.get(command[3]));
             } else
@@ -240,7 +242,7 @@ public class Protocols {
             Player p = GameService.players.get(command[1]);
             p.getDos().writeChars("\n\nThe Room Is Full !!! \n");
             if (GameService.rooms.get(command[2]).getAdmin() != null)
-                GameService.players.get(GameService.rooms.get(command[2]).getAdmin().getId()).getDos().writeChars("The Player " + p.getName() + " With Id : " + p.getId() + " Tried To Join But Room Is Full");
+                GameService.players.get(GameService.rooms.get(command[2]).getAdmin().getId()).getDos().writeChars("The Player " + p.getName() + " With Id : " + p.getId() + " Tried To Join But Room Is Full \n");
         }
     }
 
