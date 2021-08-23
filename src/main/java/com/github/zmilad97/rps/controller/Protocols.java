@@ -35,48 +35,92 @@ public class Protocols {
             switch (command[0].toUpperCase()) {
 
                 // Client to server commands
-                case "HELP" -> help();
+                case "HELP":
+                    help();
+                    break;
 
-                case "NAME" -> name();
+                case "NAME":
+                    name();
+                    break;
 
-                case "JOIN" -> joinRoom();
+                case "JOIN":
+                    joinRoom();
+                    break;
 
-                case "START" -> startGame();
 
-                case "HAND" -> hand();
+                case "START":
+                    startGame();
+                    break;
 
-                case "REMOVE" -> remove();
 
-                case "CARDS" -> {
+                case "HAND":
+                    hand();
+                    break;
+
+
+                case "REMOVE":
+                    remove();
+                    break;
+
+
+                case "CARDS":
                     return cards();
-                }
 
-                case "LEAVE" -> leave();
 
-                case "EXIT" -> {
+                case "LEAVE":
+                    leave();
+                    break;
+
+
+                case "EXIT":
                     return exit();
-                }
 
 
                 // Server to client commands
 
-                case "ENTERED" -> entered(); //send message for player whom entered the room
+                case "ENTERED":
+                    entered(); //send message for player whom entered the room
+                    break;
 
-                case "JOINED" -> joined(); //notify all players in room that a player joined the room
+                case "JOINED":
+                    joined(); //notify all players in room that a player joined the room
+                    break;
 
-                case "FULL" -> full();
 
-                case "REST" -> rest();
+                case "FULL":
+                    full();
+                    break;
 
-                case "STAT" -> stat();
 
-                case "PLAY" -> play();
+                case "REST":
+                    rest();
+                    break;
 
-                case "WON" -> won();
 
-                case "LOST" -> lost();
+                case "STAT":
+                    stat();
+                    break;
 
-                case "END" -> end();
+
+                case "PLAY":
+                    play();
+                    break;
+
+
+                case "WON":
+                    won();
+                    break;
+
+
+                case "LOST":
+                    lost();
+                    break;
+
+
+                case "END":
+                    end();
+                    break;
+
             }
         }
         return null;
@@ -153,31 +197,23 @@ public class Protocols {
     @SneakyThrows
     private void help() {
         if (command.length == 1)
-            player.getDos().writeChars("""
-
-                     Use commands without brackets\s
-
-                     JOIN [room id]: joins a room 
-                     HAND [first letter of a card]: plays a card 
-                     HELP ADMIN : shows admin commands 
-                     LEAVE : leaves the room 
-                     EXIT : exits the game
-                                                                                
-                    """);
+            player.getDos().writeChars("\n" +
+                    "                     Use commands without bracketss\n" +
+                    "\n" +
+                    "                     JOIN [room id]: joins a room \n" +
+                    "                     HAND [first letter of a card]: plays a card \n" +
+                    "                     HELP ADMIN : shows admin commands \n" +
+                    "                     LEAVE : leaves the room \n" +
+                    "                     EXIT : exits the game");
         else if (command[1].equalsIgnoreCase("ADMIN"))
-            player.getDos().writeChars("""
-
-
-                       START [room id] :start next round 
-                       REMOVE [room id] [player id]: removes a player from room
-                       REMOVE BAN [room id] [player id] : removes and ban a player\s
-                       
-                    """);
+            player.getDos().writeChars(" START [room id] :start next round \n" +
+                    "                       REMOVE [room id] [player id]: removes a player from room\n" +
+                    "                       REMOVE BAN [room id] [player id] : removes and ban a player   ");
     }
 
     private void remove() {
         if (command.length >= 3) {
-            if (command[1].toUpperCase().equals("BAN")) {
+            if (command[1].equalsIgnoreCase("BAN")) {
                 GameService.rooms.get(command[2]).banPlayers(GameService.players.get(command[3]));
                 GameService.rooms.get(command[2]).removePlayer(GameService.players.get(command[3]));
             } else
@@ -304,15 +340,15 @@ public class Protocols {
     private String cards() {
         if (command[1] != null && !command[1].equals(""))
             switch (command[1]) {
-                case "r" -> {
+                case "r":
                     return "Rock";
-                }
-                case "p" -> {
+
+                case "p":
                     return "Paper";
-                }
-                case "s" -> {
+
+                case "s":
                     return "Scissor";
-                }
+
             }
         return "";
     }
